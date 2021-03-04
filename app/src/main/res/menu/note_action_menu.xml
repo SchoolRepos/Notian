@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/note_action_edit"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/note_action_edit" />
+    <item
+        android:id="@+id/note_action_details"
+        android:icon="@drawable/baseline_task_24"
+        android:title="@string/note_action_details" />
+    <item
+        android:id="@+id/note_action_delete"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="@string/note_action_delete" />
+</menu>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/sharp_add_task_24"
+        android:onClick="onNewNote"
+        android:title="@string/new_note"
+        android:titleCondensed="@string/new_note_condensed"
+        app:showAsAction="always|withText" />
+    <item
+        android:icon="@drawable/baseline_save_24"
+        android:onClick="onSaveNotes"
+        android:title="@string/save_notes"
+        app:showAsAction="ifRoom" />
+</menu>

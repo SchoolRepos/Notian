@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Notian</string>
+    <string name="new_note">New Note</string>
+    <string name="new_note_condensed">New</string>
+    <string name="due_warning">Warning</string>
+    <string name="save_notes">Save</string>
+    <string name="no_notes">There are currently no notes.\nTry creating some with the button on the top!</string>
+    <string name="note_action_edit">Edit</string>
+    <string name="note_action_details">Details</string>
+    <string name="note_action_delete">Delete</string>
+    <string name="note_editor_title">Title</string>
+    <string name="note_editor_date">Date</string>
+    <string name="note_editor_time">Time</string>
+    <string name="note_editor_description">Description</string>
+    <string name="note_editor_save_button">Save button</string>
+    <string name="note_deleted">Note deleted</string>
+    <string name="undo">Undo</string>
+    <string name="saved_notes">Saved notes</string>
+</resources>
