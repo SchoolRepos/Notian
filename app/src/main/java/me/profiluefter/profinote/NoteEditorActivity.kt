@@ -8,25 +8,13 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import me.profiluefter.profinote.databinding.ActivityNoteEditorBinding
-import me.profiluefter.profinote.models.Note
 import me.profiluefter.profinote.models.NoteEditorActivityViewModel
+import me.profiluefter.profinote.models.NoteEditorActivityViewModelFactory
 import java.util.*
 
 class NoteEditorActivity : AppCompatActivity() {
-    private val viewModel: NoteEditorActivityViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return modelClass.getConstructor(Note::class.java, Int::class.java)
-                    .newInstance(
-                        intent.getSerializableExtra("note") as Note?,
-                        intent.getIntExtra("position", -1)
-                    )
-            }
-        }
-    }
+    private val viewModel: NoteEditorActivityViewModel by viewModels { NoteEditorActivityViewModelFactory(intent) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

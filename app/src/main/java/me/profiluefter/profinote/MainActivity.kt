@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -18,7 +19,13 @@ import me.profiluefter.profinote.models.Note
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
 
-    private val editorRequestCode = 187
+    private val editorActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if(it.resultCode != RESULT_OK || it.data == null) return@registerForActivityResult
+
+        val note = it.data!!.getSerializableExtra("note") as Note
+        val position = it.data!!.getIntExtra("position", -1)
+        viewModel.setNote(position, note)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +58,7 @@ class MainActivity : AppCompatActivity() {
     fun onNewNote(item: MenuItem) {
         val intent = Intent(this, NoteEditorActivity::class.java)
         intent.putExtra("position", -1)
-        startActivityForResult(
-            intent,
-            editorRequestCode
-        ) //TODO: Replace with registerForActivityResult(StartActivityForResult())
+        editorActivity.launch(intent)
     }
 
     fun onSaveNotes(item: MenuItem) {
@@ -66,10 +70,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, NoteEditorActivity::class.java)
         intent.putExtra("position", index)
         intent.putExtra("note", viewModel.notes.value!![index])
-        startActivityForResult(
-            intent,
-            editorRequestCode
-        ) //TODO: Replace with registerForActivityResult(StartActivityForResult())
+        editorActivity.launch(intent)
     }
 
     fun onShowNoteDetails(index: Int) {
@@ -86,18 +87,5 @@ class MainActivity : AppCompatActivity() {
             viewModel.setNote(-1, note)
         }
         snackbar.show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            editorRequestCode -> {
-                if (resultCode != RESULT_OK) return
-
-                val note = data!!.getSerializableExtra("note") as Note
-                val position = data.getIntExtra("position", -1)
-                viewModel.setNote(position, note)
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
     }
 }
