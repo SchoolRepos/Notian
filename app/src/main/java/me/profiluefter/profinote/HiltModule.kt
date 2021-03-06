@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.profiluefter.profinote.data.CSVSerializer
+import me.profiluefter.profinote.data.BinarySerializer
 import me.profiluefter.profinote.data.PrivateFileStorage
 import me.profiluefter.profinote.data.Serializer
 import me.profiluefter.profinote.data.Storage
@@ -18,7 +18,7 @@ abstract class BindingModule {
     abstract fun bindStorage(impl: PrivateFileStorage): Storage
 
     @Binds
-    abstract fun bindSerializer(impl: CSVSerializer): Serializer
+    abstract fun bindSerializer(impl: BinarySerializer): Serializer
 }
 
 @Module
@@ -26,5 +26,5 @@ abstract class BindingModule {
 object ConstantsModule {
     @Provides
     @Named("fileName")
-    fun storageLocation(): String = "notes.csv"
+    fun storageLocation(): String = "notes.bin"
 }
