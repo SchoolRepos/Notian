@@ -1,4 +1,4 @@
-package me.profiluefter.profinote
+package me.profiluefter.profinote.activities
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import me.profiluefter.profinote.R
 import me.profiluefter.profinote.models.Note
 import me.profiluefter.profinote.models.date
 import me.profiluefter.profinote.models.overdue

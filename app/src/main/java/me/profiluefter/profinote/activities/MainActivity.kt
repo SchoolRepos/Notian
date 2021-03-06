@@ -1,4 +1,4 @@
-package me.profiluefter.profinote
+package me.profiluefter.profinote.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +12,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import me.profiluefter.profinote.R
 import me.profiluefter.profinote.databinding.ActivityMainBinding
 import me.profiluefter.profinote.models.MainActivityViewModel
 import me.profiluefter.profinote.models.Note
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
 

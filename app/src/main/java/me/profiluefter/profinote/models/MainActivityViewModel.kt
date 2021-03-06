@@ -1,16 +1,18 @@
 package me.profiluefter.profinote.models
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import me.profiluefter.profinote.data.ServiceLocator
+import me.profiluefter.profinote.data.Serializer
+import javax.inject.Inject
 
 private const val TAG = "MainActivityViewModel"
 
-class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class MainActivityViewModel @Inject constructor(private val serializer: Serializer) : ViewModel() {
     val notes: MutableLiveData<List<Note>> by lazy {
         MutableLiveData<List<Note>>().also {
             it.value = listOf()
@@ -21,7 +23,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     private fun loadNotes(liveData: MutableLiveData<List<Note>>) {
         Log.i(TAG, "Loading notes...")
         viewModelScope.launch {
-            val existingNotes = ServiceLocator.dataLoader.load(getApplication<Application>())
+            val existingNotes = serializer.load()
             liveData.postValue((liveData.value!! + existingNotes).sorted())
         }
     }
@@ -34,7 +36,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     fun saveNotes() {
         Log.i(TAG, "Saving notes...")
         viewModelScope.launch {
-            ServiceLocator.dataLoader.save(notes.value!!, getApplication<Application>())
+            serializer.save(notes.value!!)
         }
     }
 

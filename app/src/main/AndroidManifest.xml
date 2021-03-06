@@ -3,6 +3,7 @@
     package="me.profiluefter.profinote">
 
     <application
+        android:name=".NotianApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,10 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notian">
         <activity
-            android:name=".NoteEditorActivity"
+            android:name=".activities.NoteEditorActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".NoteDetailsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.NoteDetailsActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

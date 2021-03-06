@@ -1,4 +1,4 @@
-package me.profiluefter.profinote
+package me.profiluefter.profinote.activities
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
