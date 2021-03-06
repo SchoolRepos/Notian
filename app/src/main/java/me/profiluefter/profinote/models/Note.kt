@@ -18,7 +18,7 @@ data class Note(
     }
 }
 
-val Note.overdue: Boolean
+val Note.isOverdue: Boolean
     get() = getInstance().after(due)
 
 private fun pad(value: Any) = value.toString().padStart(2, '0')

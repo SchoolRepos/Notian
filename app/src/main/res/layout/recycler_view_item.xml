@@ -1,62 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <TextView
-      android:id="@+id/itemTitle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="8dp"
-      android:ellipsize="end"
-      android:singleLine="true"
-      android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-      android:textSize="20sp"
-      app:drawableEndCompat="@drawable/outline_error_outline_24"
-      app:layout_constrainedWidth="true"
-      app:layout_constraintEnd_toStartOf="@+id/itemDate"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="@tools:sample/full_names" />
+    <data>
 
-  <TextView
-      android:id="@+id/itemDate"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="8dp"
-      app:layout_constraintEnd_toStartOf="@+id/itemTime"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="@tools:sample/date/ddmmyy[0]" />
+        <import type="me.profiluefter.profinote.models.NoteKt" />
+        <import type="me.profiluefter.profinote.activities.MainActivity"/>
 
-  <TextView
-      android:id="@+id/itemTime"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="8dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="@tools:sample/date/hhmm" />
+        <variable
+            name="note"
+            type="me.profiluefter.profinote.models.Note" />
 
-  <TextView
-      android:id="@+id/itemDescription"
-      android:layout_width="0dp"
-      android:layout_height="20dp"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="8dp"
-      android:ellipsize="end"
-      android:singleLine="true"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/itemTitle"
-      tools:text="@tools:sample/lorem[4:10]" />
+        <variable
+            name="position"
+            type="int" />
+    </data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:longClickable="true"
+        android:onClick="@{view -> ((MainActivity) view.context).onShowNoteDetails(position)}">
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@{note.title}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="20sp"
+            app:drawableEndCompat="@{NoteKt.isOverdue(note) ? @drawable/outline_error_outline_24 : null}"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@+id/itemDate"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/itemDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@{NoteKt.getDate(note)}"
+            app:layout_constraintEnd_toStartOf="@+id/itemTime"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/date/ddmmyy[0]" />
+
+        <TextView
+            android:id="@+id/itemTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@{NoteKt.getTime(note)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/date/hhmm" />
+
+        <TextView
+            android:id="@+id/itemDescription"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@{note.description}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemTitle"
+            tools:text="@tools:sample/lorem[4:10]" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

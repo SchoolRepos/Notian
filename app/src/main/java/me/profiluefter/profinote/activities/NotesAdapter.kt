@@ -1,17 +1,16 @@
 package me.profiluefter.profinote.activities
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.profiluefter.profinote.R
+import me.profiluefter.profinote.databinding.RecyclerViewItemBinding
 import me.profiluefter.profinote.models.Note
-import me.profiluefter.profinote.models.date
-import me.profiluefter.profinote.models.overdue
-import me.profiluefter.profinote.models.time
 
 class NotesAdapter(notes: List<Note>, private val context: MainActivity) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
@@ -22,38 +21,22 @@ class NotesAdapter(notes: List<Note>, private val context: MainActivity) :
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_item, parent, false),
+        RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         context
     )
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val note = notes[position]
-
-        holder.title.text = note.title
-
-        val warning = if (note.overdue) R.drawable.outline_error_outline_24 else 0
-        holder.title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, warning, 0)
-
-        holder.date.text = note.date
-        holder.time.text = note.time
-
-        holder.description.text = note.description
+        holder.binding.position = position
+        holder.binding.note = notes[position]
     }
 
     override fun getItemCount() = notes.size
 
-    class ViewHolder(view: View, context: MainActivity) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.itemTitle)
-        val date: TextView = view.findViewById(R.id.itemDate)
-        val time: TextView = view.findViewById(R.id.itemTime)
-        val description: TextView = view.findViewById(R.id.itemDescription)
-
+    class ViewHolder(val binding: RecyclerViewItemBinding, context: MainActivity) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
-            view.setOnClickListener {
-                context.onShowNoteDetails(this.adapterPosition)
-            }
-
+            val view = binding.root
             view.setOnLongClickListener {
                 val menu = PopupMenu(context, view)
                 menu.inflate(R.menu.note_action_menu)
@@ -70,4 +53,10 @@ class NotesAdapter(notes: List<Note>, private val context: MainActivity) :
             }
         }
     }
+}
+
+@BindingAdapter("drawableEndCompat")
+fun setDrawableEndCompat(view: TextView, drawable: Drawable?) {
+    val (start, top, _, bottom) = view.compoundDrawables
+    view.setCompoundDrawablesRelativeWithIntrinsicBounds(start, top, drawable, bottom)
 }
