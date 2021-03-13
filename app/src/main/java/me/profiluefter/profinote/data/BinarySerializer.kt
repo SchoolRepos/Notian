@@ -60,6 +60,9 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
     }
 
     private fun Note.size(): Int {
-        return 4 * 5 + title.length + description.length
+        return (4 + title.length) + // title
+                (4 * 1) + // minute, hour, day, month
+                2 + // year
+                (4 + description.length) // description
     }
 }
