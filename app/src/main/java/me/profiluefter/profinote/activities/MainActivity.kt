@@ -58,11 +58,7 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    fun onNewNote(item: MenuItem) {
-        val intent = Intent(this, NoteEditorActivity::class.java)
-        intent.putExtra("position", -1)
-        editorActivity.launch(intent)
-    }
+    fun onNewNote(item: MenuItem) = onNewNote()
 
     fun onSaveNotes(item: MenuItem) {
         viewModel.saveNotes()
@@ -90,5 +86,13 @@ class MainActivity : AppCompatActivity() {
             viewModel.setNote(-1, note)
         }
         snackbar.show()
+    }
+
+    fun onNewNote(view: View) = onNewNote()
+
+    private fun onNewNote() {
+        val intent = Intent(this, NoteEditorActivity::class.java)
+        intent.putExtra("position", -1)
+        editorActivity.launch(intent)
     }
 }

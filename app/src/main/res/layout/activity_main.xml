@@ -43,6 +43,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.5" />
+            app:layout_constraintWidth_percent="0.5"
+            tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onNewNote"
+            android:src="@drawable/baseline_add_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorOnPrimary"
+            tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
