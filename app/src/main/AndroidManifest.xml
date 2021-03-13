@@ -10,10 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Notian">
-        <activity
-            android:name=".activities.NoteEditorActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activities.NoteDetailsActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +17,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.NoteDetailsActivity"
+            android:label="@string/note_action_details"/>
+        <activity
+            android:name=".activities.NoteEditorActivity"
+            android:label="@string/note_action_edit"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.PreferenceActivity"
+            android:label="@string/preferences"/>
     </application>
 
 </manifest>

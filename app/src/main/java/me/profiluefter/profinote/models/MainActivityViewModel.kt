@@ -8,11 +8,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import me.profiluefter.profinote.data.Serializer
 import javax.inject.Inject
+import javax.inject.Provider
 
 private const val TAG = "MainActivityViewModel"
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(private val serializer: Serializer) : ViewModel() {
+class MainActivityViewModel @Inject constructor(private val serializer: Provider<Serializer>) : ViewModel() {
     val notes: MutableLiveData<List<Note>> by lazy {
         MutableLiveData<List<Note>>().also {
             it.value = listOf()
@@ -23,7 +24,7 @@ class MainActivityViewModel @Inject constructor(private val serializer: Serializ
     private fun loadNotes(liveData: MutableLiveData<List<Note>>) {
         Log.i(TAG, "Loading notes...")
         viewModelScope.launch {
-            val existingNotes = serializer.load()
+            val existingNotes = serializer.get().load()
             liveData.postValue((liveData.value!! + existingNotes).sorted())
         }
     }
@@ -36,7 +37,7 @@ class MainActivityViewModel @Inject constructor(private val serializer: Serializ
     fun saveNotes() {
         Log.i(TAG, "Saving notes...")
         viewModelScope.launch {
-            serializer.save(notes.value!!)
+            serializer.get().save(notes.value!!)
         }
     }
 

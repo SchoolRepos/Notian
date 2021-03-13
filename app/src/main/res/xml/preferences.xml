@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/storage_category">
+
+        <ListPreference
+            android:defaultValue="binary"
+            android:entries="@array/storage_format_name"
+            android:entryValues="@array/storage_format_values"
+            android:icon="@drawable/baseline_save_24"
+            android:key="storageFormat"
+            android:title="@string/storage_format_selection"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:defaultValue="privateFile"
+            android:entries="@array/storage_location_name"
+            android:entryValues="@array/storage_location_values"
+            android:icon="@drawable/baseline_save_24"
+            android:key="storageLocation"
+            android:title="@string/storage_location_selection"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="notes.bin"
+            android:icon="@drawable/baseline_save_24"
+            android:key="fileName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/storage_file_name"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

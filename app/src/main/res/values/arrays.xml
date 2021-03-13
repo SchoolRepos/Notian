@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="storage_format_name">
+        <item>@string/storage_format_csv</item>
+        <item>@string/storage_format_binary</item>
+    </string-array>
+    <string-array name="storage_format_values">
+        <item>CSV</item>
+        <item>binary</item>
+    </string-array>
+    <string-array name="storage_location_name">
+        <item>@string/storage_location_private_file</item>
+    </string-array>
+    <string-array name="storage_location_values">
+        <item>privateFile</item>
+    </string-array>
+</resources>

@@ -1,5 +1,6 @@
 package me.profiluefter.profinote.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -8,6 +9,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -53,8 +55,14 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    @SuppressLint("RestrictedApi") // https://stackoverflow.com/q/48607853
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+
+        if(menu is MenuBuilder) {
+            menu.setOptionalIconsVisible(true)
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -86,6 +94,10 @@ class MainActivity : AppCompatActivity() {
             viewModel.setNote(-1, note)
         }
         snackbar.show()
+    }
+
+    fun onSettings(item: MenuItem) {
+        startActivity(Intent(this, PreferenceActivity::class.java))
     }
 
     fun onNewNote(view: View) = onNewNote()

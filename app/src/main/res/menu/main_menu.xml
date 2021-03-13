@@ -13,4 +13,9 @@
         android:onClick="onSaveNotes"
         android:title="@string/save_notes"
         app:showAsAction="ifRoom" />
+    <item
+        android:icon="@drawable/baseline_settings_24"
+        android:onClick="onSettings"
+        android:title="@string/preferences"
+        app:showAsAction="never" />
 </menu>
