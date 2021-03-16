@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="me.profiluefter.profinote.models.NoteKt" />
+        <import type="me.profiluefter.profinote.data.NoteKt" />
 
         <variable
             name="note"
-            type="me.profiluefter.profinote.models.Note" />
+            type="me.profiluefter.profinote.data.Note" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

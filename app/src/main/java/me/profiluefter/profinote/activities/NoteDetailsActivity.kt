@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.databinding.ActivityNoteDetailsBinding
-import me.profiluefter.profinote.models.Note
+import me.profiluefter.profinote.data.Note
 
 class NoteDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

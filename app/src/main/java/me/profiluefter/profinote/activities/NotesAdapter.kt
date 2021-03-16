@@ -10,7 +10,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.databinding.RecyclerViewItemBinding
-import me.profiluefter.profinote.models.Note
+import me.profiluefter.profinote.data.Note
 
 class NotesAdapter(notes: List<Note>, private val context: MainActivity) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {

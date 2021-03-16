@@ -1,7 +1,6 @@
 package me.profiluefter.profinote.data
 
 import android.util.Log
-import me.profiluefter.profinote.models.Note
 import java.net.URLDecoder
 import java.net.URLEncoder
 import javax.inject.Inject

@@ -1,6 +1,5 @@
 package me.profiluefter.profinote.data
 
-import me.profiluefter.profinote.models.Note
 import java.nio.BufferUnderflowException
 import java.nio.ByteBuffer
 import javax.inject.Inject
@@ -22,15 +21,17 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
             }
 
             repeat(size) {
-                notes.add(Note(
-                    readString(),
-                    buffer.get().toInt(),
-                    buffer.get().toInt(),
-                    buffer.get().toInt(),
-                    buffer.get().toInt(),
-                    buffer.short.toInt(),
-                    readString()
-                ))
+                notes.add(
+                    Note(
+                        readString(),
+                        buffer.get().toInt(),
+                        buffer.get().toInt(),
+                        buffer.get().toInt(),
+                        buffer.get().toInt(),
+                        buffer.short.toInt(),
+                        readString()
+                    )
+                )
             }
 
             return notes

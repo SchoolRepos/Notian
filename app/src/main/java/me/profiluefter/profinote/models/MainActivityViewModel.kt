@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import me.profiluefter.profinote.data.Note
 import me.profiluefter.profinote.data.Serializer
 import javax.inject.Inject
 import javax.inject.Provider

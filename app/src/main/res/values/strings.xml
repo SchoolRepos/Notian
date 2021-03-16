@@ -26,4 +26,8 @@
     <!--    <string name="storage_location_description">The location where your notes are saved</string>-->
     <string name="preferences">Preferences</string>
     <string name="storage_file_name">File Name</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="no_sd_card">No SD-Card inserted</string>
+    <string name="storage_location_external_storage">External Storage</string>
 </resources>

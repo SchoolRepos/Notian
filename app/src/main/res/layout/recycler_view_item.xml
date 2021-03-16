@@ -5,12 +5,12 @@
 
     <data>
 
-        <import type="me.profiluefter.profinote.models.NoteKt" />
+        <import type="me.profiluefter.profinote.data.NoteKt" />
         <import type="me.profiluefter.profinote.activities.MainActivity"/>
 
         <variable
             name="note"
-            type="me.profiluefter.profinote.models.Note" />
+            type="me.profiluefter.profinote.data.Note" />
 
         <variable
             name="position"

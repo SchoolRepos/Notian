@@ -1,0 +1,31 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+    id 'org.jetbrains.dokka' version '1.4.20'
+}
+
+dependencies {
+    implementation 'javax.inject:javax.inject:1'
+}
+
+task srcZip(type: Zip) {
+    archiveAppendix = "src"
+    destinationDirectory = file("$buildDir/output")
+    from sourceSets*.allSource
+}
+
+jar {
+    destinationDirectory = file("$buildDir/output")
+}
+
+tasks.named("dokkaHtml") {
+    outputDirectory = file("$buildDir/dokka")
+}
+
+task docZip(type: Zip, dependsOn: [dokkaHtml]) {
+    archiveAppendix = "doc"
+    destinationDirectory = file("$buildDir/output")
+    from file("$buildDir/dokka")
+}
+
+task generateZIPs(dependsOn: [jar, srcZip, docZip])

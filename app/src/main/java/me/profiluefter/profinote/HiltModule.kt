@@ -34,10 +34,12 @@ object PreferenceBasedModule {
     @Provides
     fun storageBinding(
         @ApplicationContext context: Context,
-        private: Provider<PrivateFileStorage>
+        private: Provider<PrivateFileStorage>,
+        external: Provider<ExternalStorage>
     ): Storage = when (PreferenceManager.getDefaultSharedPreferences(context)
         .getString("storageLocation", "privateFile")) {
         "privateFile" -> private.get()
+        "externalStorage" -> external.get()
         else -> null!!
     }
 }

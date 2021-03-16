@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import me.profiluefter.profinote.data.*
 import java.util.*
 
 class NoteEditorActivityViewModelFactory(private val intent: Intent) : ViewModelProvider.Factory {

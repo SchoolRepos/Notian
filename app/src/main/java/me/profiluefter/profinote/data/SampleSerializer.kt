@@ -1,7 +1,6 @@
 package me.profiluefter.profinote.data
 
 import android.util.Log
-import me.profiluefter.profinote.models.Note
 import javax.inject.Inject
 import kotlin.math.min
 import kotlin.random.Random

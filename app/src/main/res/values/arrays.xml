@@ -10,8 +10,10 @@
     </string-array>
     <string-array name="storage_location_name">
         <item>@string/storage_location_private_file</item>
+        <item>@string/storage_location_external_storage</item>
     </string-array>
     <string-array name="storage_location_values">
         <item>privateFile</item>
+        <item>externalStorage</item>
     </string-array>
 </resources>
