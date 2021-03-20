@@ -26,10 +26,11 @@ class CSVSerializer @Inject constructor(private val storage: Storage) : Serializ
     }
 
     private fun fromCSV(line: String): Note {
-        val (title, minute, hour, day, month, year, description) = line.split(";")
+        val (title, done, minute, hour, day, month, year, description) = line.split(";")
         Log.v(TAG, "Parsed note \"$title\".")
         return Note(
             URLDecoder.decode(title, "UTF-8"),
+            done.toBoolean(),
             minute.toInt(),
             hour.toInt(),
             day.toInt(),
@@ -42,10 +43,11 @@ class CSVSerializer @Inject constructor(private val storage: Storage) : Serializ
     private fun toCSV(note: Note): String = note.run {
         Log.v(TAG, "Serializing note \"$title\".")
         fun encode(string: String) = URLEncoder.encode(string, "UTF-8")
-        "${encode(title)};$minute;$hour;$day;$month;$year;${encode(description)}"
+        "${encode(title)};$done;$minute;$hour;$day;$month;$year;${encode(description)}"
     }
 }
 
 // Helper for object destructuring in CSVDataLoader#fromCSV(String)
 private operator fun <T> List<T>.component6(): T = get(5)
 private operator fun <T> List<T>.component7(): T = get(6)
+private operator fun <T> List<T>.component8(): T = get(7)

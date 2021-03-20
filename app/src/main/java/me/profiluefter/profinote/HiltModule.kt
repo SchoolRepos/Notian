@@ -23,11 +23,13 @@ object PreferenceBasedModule {
     fun serializerBinding(
         @ApplicationContext context: Context,
         binary: Provider<BinarySerializer>,
-        csv: Provider<CSVSerializer>
+        csv: Provider<CSVSerializer>,
+        gson: Provider<GSONSerializer>
     ): Serializer = when (PreferenceManager.getDefaultSharedPreferences(context)
         .getString("storageFormat", "binary")) {
         "binary" -> binary.get()
         "CSV" -> csv.get()
+        "GSON" -> gson.get()
         else -> null!!
     }
 

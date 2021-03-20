@@ -24,6 +24,7 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
                 notes.add(
                     Note(
                         readString(),
+                        buffer.get().toInt() == 1,
                         buffer.get().toInt(),
                         buffer.get().toInt(),
                         buffer.get().toInt(),
@@ -48,6 +49,7 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
             buffer
                 .putInt(note.title.length)
                 .put(note.title.toByteArray(Charsets.UTF_8))
+                .put((if(note.done) 1 else 0).toByte())
                 .put(note.minute.toByte())
                 .put(note.hour.toByte())
                 .put(note.day.toByte())
@@ -62,6 +64,7 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
 
     private fun Note.size(): Int {
         return (4 + title.length) + // title
+                1 + // done
                 (4 * 1) + // minute, hour, day, month
                 2 + // year
                 (4 + description.length) // description

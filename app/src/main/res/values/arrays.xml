@@ -3,10 +3,12 @@
     <string-array name="storage_format_name">
         <item>@string/storage_format_csv</item>
         <item>@string/storage_format_binary</item>
+        <item>@string/storage_format_gson</item>
     </string-array>
     <string-array name="storage_format_values">
         <item>CSV</item>
         <item>binary</item>
+        <item>GSON</item>
     </string-array>
     <string-array name="storage_location_name">
         <item>@string/storage_location_private_file</item>

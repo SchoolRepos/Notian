@@ -29,6 +29,7 @@ class NoteEditorActivityViewModel(note: Note?, position: Int) : ViewModel() {
     }
 
     val title: MutableLiveData<String> = MutableLiveData(note?.title ?: "")
+    val done: MutableLiveData<Boolean> = MutableLiveData(note?.done ?: false)
     val date: MutableLiveData<String> = MutableLiveData(note?.date ?: currentDate)
     val time: MutableLiveData<String> = MutableLiveData(note?.time ?: currentTime)
     val description: MutableLiveData<String> = MutableLiveData(note?.description ?: "")
@@ -37,7 +38,7 @@ class NoteEditorActivityViewModel(note: Note?, position: Int) : ViewModel() {
         get() {
             val (day, month, year) = date.value!!.split(".").map { it.toInt() }
             val (hour, minute) = time.value!!.split(":").map { it.toInt() }
-            return Note(title.value!!, minute, hour, day, month, year, description.value!!)
+            return Note(title.value!!, done.value!!, minute, hour, day, month, year, description.value!!)
         }
     val notePosition: Int = position
 
@@ -46,7 +47,7 @@ class NoteEditorActivityViewModel(note: Note?, position: Int) : ViewModel() {
             val calendar = Calendar.getInstance()
             return formatDate(
                 calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.YEAR)
             )
         }

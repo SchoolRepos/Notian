@@ -6,6 +6,7 @@ import java.util.Calendar.getInstance
 
 data class Note(
     val title: String,
+    var done: Boolean,
     val minute: Int,
     val hour: Int,
     val day: Int,
@@ -19,7 +20,7 @@ data class Note(
 }
 
 val Note.isOverdue: Boolean
-    get() = getInstance().after(due)
+    get() = !done && getInstance().after(due)
 
 private fun pad(value: Any) = value.toString().padStart(2, '0')
 
