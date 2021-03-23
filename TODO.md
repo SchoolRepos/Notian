@@ -2,8 +2,12 @@
 
 * file name provider only executed on app launch (sometimes it works???)
 * overflow menu settings icon white on white when light theme
-* checking note in details activity doesn't work
 * "couldn't find view with id 2131296670" when tapping on edittexts in editor view
+* Navigation only works if activity_main.xml uses a fragment instead of a FragmentContainerView
+
+# Minor improvements
+
+* Vertically center Task name if no description is given
 
 # Features
 

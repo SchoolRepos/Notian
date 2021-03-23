@@ -1,25 +1,21 @@
 package me.profiluefter.profinote.models
 
-import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import me.profiluefter.profinote.data.*
 import java.util.*
 
-class NoteEditorActivityViewModelFactory(private val intent: Intent) : ViewModelProvider.Factory {
+class NoteEditorViewModelFactory(private val note: Note?, private val position: Int) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (!modelClass.isAssignableFrom(NoteEditorActivityViewModel::class.java))
+        if (!modelClass.isAssignableFrom(NoteEditorViewModel::class.java))
             throw IllegalArgumentException("Unknown ViewModel")
-        return NoteEditorActivityViewModel(
-            intent.getSerializableExtra("note") as Note?,
-            intent.getIntExtra("position", -1)
-        ) as T
+        return NoteEditorViewModel(note, position) as T
     }
 }
 
-class NoteEditorActivityViewModel(note: Note?, position: Int) : ViewModel() {
+class NoteEditorViewModel(note: Note?, position: Int) : ViewModel() {
     fun setTime(hour: Int, minute: Int) {
         time.value = formatTime(hour, minute)
     }

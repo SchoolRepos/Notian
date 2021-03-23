@@ -14,7 +14,7 @@ import javax.inject.Provider
 private const val TAG = "MainActivityViewModel"
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(private val serializer: Provider<Serializer>) : ViewModel() {
+class MainViewModel @Inject constructor(private val serializer: Provider<Serializer>) : ViewModel() {
     val notes: MutableLiveData<List<Note>> by lazy {
         MutableLiveData<List<Note>>().also {
             it.value = listOf()

@@ -5,27 +5,33 @@
 
     <data>
 
+        <import type="me.profiluefter.profinote.data.NoteKt" />
+
+        <variable
+            name="fragment"
+            type="me.profiluefter.profinote.activities.NoteEditorFragment" />
+
         <variable
             name="viewModel"
-            type="me.profiluefter.profinote.models.NoteEditorActivityViewModel" />
+            type="me.profiluefter.profinote.models.NoteEditorViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.NoteEditorActivity">
+        tools:context=".activities.NoteEditorFragment">
 
         <CheckBox
             android:id="@+id/noteEditorDone"
-            android:checked="@={viewModel.done}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:minHeight="0dp"
+            android:checked="@={viewModel.done}"
             android:minWidth="0dp"
+            android:minHeight="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/noteEditorTitleContainer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/noteEditorTitleContainer"/>
+            app:layout_constraintTop_toTopOf="@id/noteEditorTitleContainer" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/noteEditorTitleContainer"
@@ -54,7 +60,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:onClick="openDatePicker"
+            android:onClick="@{(v) -> fragment.openDatePicker(v)}"
             android:text="@{viewModel.date}"
             app:layout_constraintEnd_toStartOf="@+id/noteEditorTime"
             app:layout_constraintHorizontal_bias="0.5"
@@ -68,7 +74,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:onClick="openTimePicker"
+            android:onClick="@{(v) -> fragment.openTimePicker(v)}"
             android:text="@{viewModel.time}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -109,11 +115,11 @@
             android:clickable="true"
             android:contentDescription="@string/note_editor_save_button"
             android:focusable="true"
-            android:onClick="saveNote"
+            android:onClick="@{() -> fragment.saveNote()}"
             android:src="@drawable/baseline_save_24"
-            app:tint="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorOnPrimary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

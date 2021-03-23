@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/noteListFragment">
+
+    <fragment
+        android:id="@+id/noteListFragment"
+        android:name="me.profiluefter.profinote.activities.NoteListFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_note_list">
+        <action
+            android:id="@+id/openSettings"
+            app:destination="@id/preferenceFragment" />
+        <action
+            android:id="@+id/openEditor"
+            app:destination="@id/noteEditorFragment" />
+        <action
+            android:id="@+id/showDetails"
+            app:destination="@id/noteDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/noteDetailsFragment"
+        android:name="me.profiluefter.profinote.activities.NoteDetailsFragment"
+        android:label="@string/note_action_details"
+        tools:layout="@layout/fragment_note_details">
+        <argument
+            android:name="index"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/noteEditorFragment"
+        android:name="me.profiluefter.profinote.activities.NoteEditorFragment"
+        android:label="@string/note_action_edit"
+        tools:layout="@layout/fragment_note_editor">
+        <argument
+            android:name="index"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/preferenceFragment"
+        android:name="me.profiluefter.profinote.activities.SettingsFragment"
+        android:label="@string/preferences" />
+</navigation>
