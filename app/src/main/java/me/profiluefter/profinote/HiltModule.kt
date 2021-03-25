@@ -8,6 +8,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import me.profiluefter.profinote.data.*
+import me.profiluefter.profinote.data.serializer.BinarySerializer
+import me.profiluefter.profinote.data.serializer.CSVSerializer
+import me.profiluefter.profinote.data.serializer.GSONSerializer
+import me.profiluefter.profinote.data.storage.ExternalStorage
+import me.profiluefter.profinote.data.storage.PrivateFileStorage
 import javax.inject.Named
 import javax.inject.Provider
 

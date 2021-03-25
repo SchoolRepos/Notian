@@ -1,4 +1,4 @@
-package me.profiluefter.profinote.data
+package me.profiluefter.profinote.data.entities
 
 import java.io.Serializable
 import java.util.*

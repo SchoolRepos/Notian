@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="me.profiluefter.profinote.data.NoteKt" />
+        <import type="me.profiluefter.profinote.data.entities.NoteKt" />
 
         <variable
             name="fragment"

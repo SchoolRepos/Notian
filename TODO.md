@@ -4,6 +4,7 @@
 * overflow menu settings icon white on white when light theme
 * "couldn't find view with id 2131296670" when tapping on edittexts in editor view
 * Navigation only works if activity_main.xml uses a fragment instead of a FragmentContainerView
+* BinarySerializer can't handle UTF-8
 
 # Minor improvements
 

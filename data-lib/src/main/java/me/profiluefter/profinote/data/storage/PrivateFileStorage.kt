@@ -1,9 +1,10 @@
-package me.profiluefter.profinote.data
+package me.profiluefter.profinote.data.storage
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import me.profiluefter.profinote.data.Storage
 import java.io.FileNotFoundException
 import javax.inject.Inject
 import javax.inject.Named

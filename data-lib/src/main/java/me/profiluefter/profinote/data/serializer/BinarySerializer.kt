@@ -1,5 +1,8 @@
-package me.profiluefter.profinote.data
+package me.profiluefter.profinote.data.serializer
 
+import me.profiluefter.profinote.data.entities.Note
+import me.profiluefter.profinote.data.Serializer
+import me.profiluefter.profinote.data.Storage
 import java.nio.BufferUnderflowException
 import java.nio.ByteBuffer
 import javax.inject.Inject

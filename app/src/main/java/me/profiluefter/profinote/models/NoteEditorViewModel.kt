@@ -3,7 +3,7 @@ package me.profiluefter.profinote.models
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.profiluefter.profinote.data.*
+import me.profiluefter.profinote.data.entities.*
 import java.util.*
 
 class NoteEditorViewModelFactory(private val note: Note?, private val position: Int) : ViewModelProvider.Factory {

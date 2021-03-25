@@ -1,6 +1,8 @@
-package me.profiluefter.profinote.data
+package me.profiluefter.profinote.data.serializer
 
 import android.util.Log
+import me.profiluefter.profinote.data.entities.Note
+import me.profiluefter.profinote.data.Serializer
 import javax.inject.Inject
 import kotlin.math.min
 import kotlin.random.Random

@@ -1,7 +1,10 @@
-package me.profiluefter.profinote.data
+package me.profiluefter.profinote.data.serializer
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import me.profiluefter.profinote.data.entities.Note
+import me.profiluefter.profinote.data.Serializer
+import me.profiluefter.profinote.data.Storage
 import javax.inject.Inject
 
 private val gson = Gson()
