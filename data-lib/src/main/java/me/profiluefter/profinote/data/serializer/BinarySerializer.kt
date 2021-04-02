@@ -1,15 +1,13 @@
 package me.profiluefter.profinote.data.serializer
 
-import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.data.Serializer
-import me.profiluefter.profinote.data.Storage
+import me.profiluefter.profinote.data.entities.Note
 import java.nio.BufferUnderflowException
 import java.nio.ByteBuffer
-import javax.inject.Inject
 
-class BinarySerializer @Inject constructor(private val storage: Storage) : Serializer {
-    override suspend fun load(): List<Note> {
-        val buffer = ByteBuffer.wrap(storage.get() ?: return emptyList())
+class BinarySerializer : Serializer {
+    override suspend fun load(data: ByteArray): List<Note> {
+        val buffer = ByteBuffer.wrap(data)
 
         var notes: MutableList<Note>? = null
         try {
@@ -18,9 +16,9 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
 
             fun readString(): String {
                 val length = buffer.int
-                val data = ByteArray(length)
-                buffer.get(data)
-                return String(data, Charsets.UTF_8)
+                val readBuffer = ByteArray(length)
+                buffer.get(readBuffer)
+                return String(readBuffer, Charsets.UTF_8)
             }
 
             repeat(size) {
@@ -44,7 +42,7 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
         }
     }
 
-    override suspend fun save(notes: List<Note>) {
+    override suspend fun save(notes: List<Note>): ByteArray {
         val buffer = ByteBuffer.allocate(4 + notes.sumBy { it.size() })
 
         buffer.putInt(notes.size)
@@ -62,7 +60,7 @@ class BinarySerializer @Inject constructor(private val storage: Storage) : Seria
                 .put(note.description.toByteArray(Charsets.UTF_8))
         }
 
-        storage.store(buffer.array())
+        return buffer.array()
     }
 
     private fun Note.size(): Int {

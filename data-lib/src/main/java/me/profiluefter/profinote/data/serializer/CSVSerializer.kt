@@ -1,20 +1,17 @@
 package me.profiluefter.profinote.data.serializer
 
 import android.util.Log
-import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.data.Serializer
-import me.profiluefter.profinote.data.Storage
+import me.profiluefter.profinote.data.entities.Note
 import java.net.URLDecoder
 import java.net.URLEncoder
-import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "CSVDataLoader"
 
 @Singleton
-class CSVSerializer @Inject constructor(private val storage: Storage) : Serializer {
-    override suspend fun load(): List<Note> {
-        val data = storage.get() ?: return emptyList()
+class CSVSerializer : Serializer {
+    override suspend fun load(data: ByteArray): List<Note> {
         return data.toString(Charsets.UTF_8).lines()
             .filterNot { it.isBlank() }
             .map { fromCSV(it) }.toList().also {
@@ -22,10 +19,9 @@ class CSVSerializer @Inject constructor(private val storage: Storage) : Serializ
             }
     }
 
-    override suspend fun save(notes: List<Note>) {
+    override suspend fun save(notes: List<Note>): ByteArray {
         Log.i(TAG, "Serializing ${notes.size} notes.")
-        val data = notes.joinToString("\n") { toCSV(it) }.toByteArray(Charsets.UTF_8)
-        storage.store(data)
+        return notes.joinToString("\n") { toCSV(it) }.toByteArray(Charsets.UTF_8)
     }
 
     private fun fromCSV(line: String): Note {
