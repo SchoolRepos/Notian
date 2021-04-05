@@ -13,6 +13,7 @@ import javax.inject.Named
 
 private const val TAG = "ExternalStorage"
 
+@Deprecated("Replaced by Room")
 class ExternalStorage @Inject constructor(
     @ApplicationContext private val context: Context,
     @Named("fileName") private val fileName: String

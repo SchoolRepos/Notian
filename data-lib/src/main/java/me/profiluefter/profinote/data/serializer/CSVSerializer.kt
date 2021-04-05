@@ -11,25 +11,27 @@ import javax.inject.Singleton
 
 private const val TAG = "CSVDataLoader"
 
+@Deprecated("Replaced by Room")
 @Singleton
 class CSVSerializer @Inject constructor() : Serializer {
     override suspend fun deserialize(data: ByteArray): TodoList {
-        return data.toString(Charsets.UTF_8).lines()
+        return TodoList("CSV", data.toString(Charsets.UTF_8).lines()
             .filterNot { it.isBlank() }
             .map { fromCSV(it) }.toList().also {
                 Log.i(TAG, "Successfully loaded ${it.size} notes!")
-            }
+            })
     }
 
-    override suspend fun serialize(notes: TodoList): ByteArray {
-        Log.i(TAG, "Serializing ${notes.size} notes.")
-        return notes.joinToString("\n") { toCSV(it) }.toByteArray(Charsets.UTF_8)
+    override suspend fun serialize(list: TodoList): ByteArray {
+        Log.i(TAG, "Serializing ${list.notes.size} notes.")
+        return list.notes.joinToString("\n") { toCSV(it) }.toByteArray(Charsets.UTF_8)
     }
 
     private fun fromCSV(line: String): Note {
         val (title, done, minute, hour, day, month, year, description) = line.split(";")
         Log.v(TAG, "Parsed note \"$title\".")
         return Note(
+            null,
             URLDecoder.decode(title, "UTF-8"),
             done.toBoolean(),
             minute.toInt(),

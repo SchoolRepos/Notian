@@ -11,6 +11,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
+@Deprecated("Replaced by Room")
 class PrivateFileStorage @Inject constructor(
     @Named("fileName") private val fileName: String,
     @ApplicationContext private val context: Context

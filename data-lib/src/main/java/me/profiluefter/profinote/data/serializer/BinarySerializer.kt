@@ -7,6 +7,7 @@ import java.nio.BufferUnderflowException
 import java.nio.ByteBuffer
 import javax.inject.Inject
 
+@Deprecated("Replaced by Room")
 class BinarySerializer @Inject constructor() : Serializer {
     override suspend fun deserialize(data: ByteArray): TodoList {
         val buffer = ByteBuffer.wrap(data)
@@ -26,6 +27,7 @@ class BinarySerializer @Inject constructor() : Serializer {
             repeat(size) {
                 notes.add(
                     Note(
+                        null,
                         readString(),
                         buffer.get().toInt() == 1,
                         buffer.get().toInt(),
@@ -38,13 +40,14 @@ class BinarySerializer @Inject constructor() : Serializer {
                 )
             }
 
-            return notes
+            return TodoList("Binary", notes)
         } catch (e: BufferUnderflowException) {
-            return notes ?: emptyList()
+            return TodoList("Binary", notes ?: return TodoList.default())
         }
     }
 
-    override suspend fun serialize(notes: TodoList): ByteArray {
+    override suspend fun serialize(list: TodoList): ByteArray {
+        val notes = list.notes
         val buffer = ByteBuffer.allocate(4 + notes.sumBy { it.size() })
 
         buffer.putInt(notes.size)
@@ -52,7 +55,7 @@ class BinarySerializer @Inject constructor() : Serializer {
             buffer
                 .putInt(note.title.length)
                 .put(note.title.toByteArray(Charsets.UTF_8))
-                .put((if(note.done) 1 else 0).toByte())
+                .put((if (note.done) 1 else 0).toByte())
                 .put(note.minute.toByte())
                 .put(note.hour.toByte())
                 .put(note.day.toByte())
