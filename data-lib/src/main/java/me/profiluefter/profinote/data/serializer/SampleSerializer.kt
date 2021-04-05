@@ -2,12 +2,14 @@ package me.profiluefter.profinote.data.serializer
 
 import me.profiluefter.profinote.data.Serializer
 import me.profiluefter.profinote.data.entities.Note
+import me.profiluefter.profinote.data.entities.TodoList
+import javax.inject.Inject
 import kotlin.math.min
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-class SampleSerializer : Serializer {
-    override suspend fun load(data: ByteArray): List<Note> = Array(20) {
+class SampleSerializer @Inject constructor() : Serializer {
+    override suspend fun deserialize(data: ByteArray): TodoList = Array(20) {
         Note(
             "Sleep $it ${"is important for your health because it helps your body to regain energy!".substring(0, min(it/2, 72))}",
             false,
@@ -16,7 +18,7 @@ class SampleSerializer : Serializer {
         )
     }.toList()
 
-    override suspend fun save(notes: List<Note>): ByteArray {
+    override suspend fun serialize(notes: TodoList): ByteArray {
         TODO("Save is NO-OP")
     }
 }

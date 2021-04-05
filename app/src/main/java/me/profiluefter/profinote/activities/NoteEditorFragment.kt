@@ -25,7 +25,7 @@ class NoteEditorFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private val editor: NoteEditorViewModel by viewModels {
         NoteEditorViewModelFactory(
-            if (args.index == -1) null else viewModel.notes.value!![args.index],
+            if (args.index == -1) null else viewModel.getNote(args.index),
             args.index
         )
     }

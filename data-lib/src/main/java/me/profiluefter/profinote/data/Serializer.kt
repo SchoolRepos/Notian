@@ -1,8 +1,8 @@
 package me.profiluefter.profinote.data
 
-import me.profiluefter.profinote.data.entities.Note
+import me.profiluefter.profinote.data.entities.TodoList
 
 interface Serializer {
-    suspend fun load(data: ByteArray): List<Note>
-    suspend fun save(notes: List<Note>): ByteArray
+    suspend fun deserialize(data: ByteArray): TodoList
+    suspend fun serialize(notes: TodoList): ByteArray
 }

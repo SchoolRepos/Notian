@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onDeleteNote(index: Int, view: View) {
-        val note = viewModel.notes.value!![index]
+        val note = viewModel.getNote(index)
 
         viewModel.deleteNote(index)
 

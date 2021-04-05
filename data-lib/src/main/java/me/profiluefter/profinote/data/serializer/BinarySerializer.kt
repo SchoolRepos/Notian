@@ -2,11 +2,13 @@ package me.profiluefter.profinote.data.serializer
 
 import me.profiluefter.profinote.data.Serializer
 import me.profiluefter.profinote.data.entities.Note
+import me.profiluefter.profinote.data.entities.TodoList
 import java.nio.BufferUnderflowException
 import java.nio.ByteBuffer
+import javax.inject.Inject
 
-class BinarySerializer : Serializer {
-    override suspend fun load(data: ByteArray): List<Note> {
+class BinarySerializer @Inject constructor() : Serializer {
+    override suspend fun deserialize(data: ByteArray): TodoList {
         val buffer = ByteBuffer.wrap(data)
 
         var notes: MutableList<Note>? = null
@@ -42,7 +44,7 @@ class BinarySerializer : Serializer {
         }
     }
 
-    override suspend fun save(notes: List<Note>): ByteArray {
+    override suspend fun serialize(notes: TodoList): ByteArray {
         val buffer = ByteBuffer.allocate(4 + notes.sumBy { it.size() })
 
         buffer.putInt(notes.size)

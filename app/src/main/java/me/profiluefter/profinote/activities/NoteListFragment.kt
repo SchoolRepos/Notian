@@ -29,9 +29,9 @@ class NoteListFragment : Fragment() {
         lifecycleOwner = this@NoteListFragment
         viewModel = this@NoteListFragment.viewModel
     }.root.also { root ->
-        val adapter = NotesAdapter(viewModel.notes.value!!, requireActivity() as MainActivity)
-        viewModel.notes.observe(viewLifecycleOwner) {
-            adapter.notes = it
+        val adapter = NotesAdapter(viewModel.sortedList.value!!.notes, requireActivity() as MainActivity)
+        viewModel.sortedList.observe(viewLifecycleOwner) {
+            adapter.notes = it.notes
         }
 
         val recyclerView = root.findViewById<RecyclerView>(R.id.notes)

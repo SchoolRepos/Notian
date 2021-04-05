@@ -17,14 +17,14 @@ class ExternalStorage @Inject constructor(
     @ApplicationContext private val context: Context,
     @Named("fileName") private val fileName: String
 ) : Storage {
-    override suspend fun store(data: ByteArray) = withContext(Dispatchers.IO) {
+    override suspend fun save(data: ByteArray) = withContext(Dispatchers.IO) {
         val externalStorage = context.getExternalFilesDir(null)
         val file = File(externalStorage!!.absolutePath + File.separator + fileName)
         Log.i(TAG, "Saving data to ${file.absolutePath}!")
         file.writeBytes(data)
     }
 
-    override suspend fun get(): ByteArray? = withContext(Dispatchers.IO) {
+    override suspend fun read(listID: Int): ByteArray? = withContext(Dispatchers.IO) {
         val externalStorage = context.getExternalFilesDir(null)
         try {
             val file = File(externalStorage!!.absolutePath + File.separator + fileName)

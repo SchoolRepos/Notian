@@ -16,14 +16,14 @@ class PrivateFileStorage @Inject constructor(
     @ApplicationContext private val context: Context
 ) : Storage {
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun store(data: ByteArray) = withContext(Dispatchers.IO) {
+    override suspend fun save(data: ByteArray) = withContext(Dispatchers.IO) {
         context.openFileOutput(fileName, Context.MODE_PRIVATE).buffered().use {
             it.write(data)
         }
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun get(): ByteArray? = withContext(Dispatchers.IO) {
+    override suspend fun read(listID: Int): ByteArray? = withContext(Dispatchers.IO) {
         try {
             context.openFileInput(fileName).buffered().use {
                 it.readBytes()

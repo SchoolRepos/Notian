@@ -27,6 +27,6 @@ class NoteDetailsFragment : Fragment() {
         false
     ).apply {
         lifecycleOwner = this@NoteDetailsFragment
-        note = this@NoteDetailsFragment.viewModel.notes.value!![args.index]
+        note = this@NoteDetailsFragment.viewModel.getNote(args.index)
     }.root
 }
