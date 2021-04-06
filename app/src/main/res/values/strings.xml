@@ -16,20 +16,6 @@
     <string name="note_deleted">Task deleted</string>
     <string name="undo">Undo</string>
     <string name="saved_notes">Saved tasks</string>
-    <string name="storage_format_csv">CSV</string>
-    <string name="storage_format_binary">Binary</string>
-    <string name="storage_format_selection">Storage Format</string>
-    <!--    <string name="storage_format_description">The format that is used to save your notes</string>-->
-    <string name="storage_category">Storage</string>
-    <string name="storage_location_private_file">Internal Storage</string>
-    <string name="storage_location_selection">Storage Location</string>
-    <!--    <string name="storage_location_description">The location where your notes are saved</string>-->
     <string name="preferences">Preferences</string>
-    <string name="storage_file_name">File Name</string>
-    <string name="permission_denied">Permission denied</string>
-    <string name="grant_permission">Grant permission</string>
-    <string name="no_sd_card">No SD-Card inserted</string>
-    <string name="storage_location_external_storage">External Storage</string>
-    <string name="storage_format_gson">GSON</string>
     <string name="unknown_username">Unknown Username</string>
 </resources>

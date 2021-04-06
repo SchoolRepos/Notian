@@ -28,12 +28,6 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
         }
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("Feature will be removed")
-    fun saveNotes() {
-        TODO("Will be removed")
-    }
-
     fun setNote(position: Int, note: Note) = GlobalScope.launch {
         if (position == -1) {
             repository.addNote(note to list.value!!)

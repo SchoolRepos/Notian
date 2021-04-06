@@ -7,12 +7,7 @@
         android:onClick="onNewNote"
         android:title="@string/new_note"
         android:titleCondensed="@string/new_note_condensed"
-        app:showAsAction="always|withText" />
-    <item
-        android:icon="@drawable/baseline_save_24"
-        android:onClick="onSaveNotes"
-        android:title="@string/save_notes"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
     <item
         android:icon="@drawable/baseline_settings_24"
         android:onClick="onSettings"
