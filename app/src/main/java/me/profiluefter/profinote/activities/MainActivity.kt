@@ -112,4 +112,8 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
         }
+
+    fun setNoteChecked(index: Int, checked: Boolean) {
+        viewModel.setNoteChecked(index, checked)
+    }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -27,6 +28,11 @@ class NoteDetailsFragment : Fragment() {
         false
     ).apply {
         lifecycleOwner = this@NoteDetailsFragment
-        note = this@NoteDetailsFragment.viewModel.getNote(args.index)
-    }.root
+        viewModel = this@NoteDetailsFragment.viewModel
+        index = args.index
+    }.root.also { root ->
+        root.findViewById<CheckBox>(R.id.note_details_done).setOnCheckedChangeListener { _, checked ->
+            viewModel.setNoteChecked(args.index, checked)
+        }
+    }
 }

@@ -1,13 +1,15 @@
-package me.profiluefter.profinote.data.synchronization
+package me.profiluefter.profinote.data.remote
 
+import me.profiluefter.profinote.data.entities.RawTodo
+import me.profiluefter.profinote.data.entities.RawTodoList
 import retrofit2.Call
 import retrofit2.http.*
 
 interface NotesAPI {
     @POST("register.php")
     suspend fun register(
-        @Body credentials: APIObjects.Credentials
-    ): Call<APIObjects.UserID>
+        @Body credentials: Credentials
+    ): Call<UserID>
 
     // --------------------
     // Lists
@@ -15,31 +17,31 @@ interface NotesAPI {
 
     @POST("todolists.php")
     suspend fun newList(
-        @Body list: APIObjects.TodoList,
+        @Body list: RawTodoList,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<APIObjects.TodoList>
+    ): Call<RawTodoList>
 
     @GET("todolists.php")
     suspend fun getList(
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<APIObjects.TodoList>
+    ): Call<RawTodoList>
 
     @GET("todolists.php")
     suspend fun getAllLists(
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<List<APIObjects.TodoList>>
+    ): Call<List<RawTodoList>>
 
     @PUT("todolists.php")
     suspend fun editList(
         @Query("id") id: Int,
-        @Body list: APIObjects.TodoList,
+        @Body list: RawTodoList,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<APIObjects.TodoList>
+    ): Call<RawTodoList>
 
     @DELETE("todolists.php")
     suspend fun deleteList(
@@ -54,31 +56,31 @@ interface NotesAPI {
 
     @POST("todo.php")
     suspend fun newTodo(
-        @Body todo: APIObjects.Todo,
+        @Body todo: RawTodo,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<APIObjects.Todo>
+    ): Call<RawTodo>
 
     @GET("todo.php")
     suspend fun getTodo(
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<APIObjects.Todo>
+    ): Call<RawTodo>
 
     @GET("todo.php")
     suspend fun getAllTodos(
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<List<APIObjects.Todo>>
+    ): Call<List<RawTodo>>
 
     @PUT("todo.php")
     suspend fun editTodo(
         @Query("id") id: Int,
-        @Body todo: APIObjects.Todo,
+        @Body todo: RawTodo,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<APIObjects.Todo>
+    ): Call<RawTodo>
 
     @DELETE("todo.php")
     suspend fun deleteTodo(
@@ -88,32 +90,12 @@ interface NotesAPI {
     ): Call<Void>
 }
 
-object APIObjects {
-    data class Credentials(
-        val username: String,
-        val password: String,
-        val name: String
-    )
+data class Credentials(
+    val username: String,
+    val password: String,
+    val name: String
+)
 
-    data class UserID(
-        val userId: String
-    )
-
-    data class TodoList(
-        val name: String,
-        val additionalData: String,
-        val id: String? = null,
-        val ownerId: String? = null
-    )
-
-    data class Todo(
-        val todoListId: String,
-        val title: String,
-        val description: String,
-        val dueDate: String,
-        val state: String,
-        val additionalData: String,
-        val id: String?,
-        val ownerId: String?
-    )
-}
+data class UserID(
+    val userId: String
+)

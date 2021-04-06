@@ -24,6 +24,7 @@ class NoteEditorViewModel(note: Note?, position: Int) : ViewModel() {
         date.value = formatDate(day, month, year)
     }
 
+    private val localID: Int = note?.localID ?: -1
     val title: MutableLiveData<String> = MutableLiveData(note?.title ?: "")
     val done: MutableLiveData<Boolean> = MutableLiveData(note?.done ?: false)
     val date: MutableLiveData<String> = MutableLiveData(note?.date ?: currentDate)
@@ -34,7 +35,7 @@ class NoteEditorViewModel(note: Note?, position: Int) : ViewModel() {
         get() {
             val (day, month, year) = date.value!!.split(".").map { it.toInt() }
             val (hour, minute) = time.value!!.split(":").map { it.toInt() }
-            return Note(title.value!!, done.value!!, minute, hour, day, month, year, description.value!!)
+            return Note(localID, title.value!!, done.value!!, minute, hour, day, month, year, description.value!!)
         }
     val notePosition: Int = position
 

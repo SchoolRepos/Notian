@@ -1,4 +1,4 @@
-package me.profiluefter.profinote.data.synchronization
+package me.profiluefter.profinote.data.remote
 
 import dagger.Module
 import dagger.Provides

@@ -1,19 +1,15 @@
 package me.profiluefter.profinote.data.entities
 
-import me.profiluefter.profinote.data.synchronization.APIObjects
 import java.io.Serializable
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoField
+import java.time.temporal.ChronoField.*
 import java.util.*
 import java.util.Calendar.getInstance
 
-val apiPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
 data class Note(
-    val id: Int?,
+    val localID: Int,
     val title: String,
-    var done: Boolean, //TODO: Does not API sync! Make immutable!
+    val done: Boolean,
     val minute: Int,
     val hour: Int,
     val day: Int,
@@ -25,35 +21,37 @@ data class Note(
         return this.due.compareTo(other.due)
     }
 
-    fun toAPI(todoListId: Int): APIObjects.Todo = APIObjects.Todo(
-        todoListId.toString(),
+    fun toRaw(remoteID: String, todoList: RawTodoList): RawTodo = RawTodo(
+        localID,
+        remoteID,
+        "0",
+        todoList.localID,
+        todoList.id,
         title,
         description,
         apiPattern.format(LocalDateTime.of(year, month, day, hour, minute)),
         if (done) "DONE" else "TODO",
-        "",
-        null,
-        null
+        apiPattern.format(LocalDateTime.now())
     )
 
     companion object {
-        fun from(api: APIObjects.Todo): Note {
-            val dueDate = apiPattern.parse(api.dueDate)
+        fun from(api: RawTodo): Note = api.run {
+            val due = apiPattern.parse(dueDate)
 
             return Note(
-                api.id?.toInt(),
-                api.title,
-                when(api.state) {
+                id.toInt(),
+                title,
+                when(state) {
                     "DONE" -> true
                     "TODO" -> false
-                    else -> false
+                    else -> throw IllegalStateException("Unknown Todo state \"$state\"")
                 },
-                dueDate.get(ChronoField.MINUTE_OF_HOUR),
-                dueDate.get(ChronoField.HOUR_OF_DAY),
-                dueDate.get(ChronoField.DAY_OF_MONTH),
-                dueDate.get(ChronoField.MONTH_OF_YEAR),
-                dueDate.get(ChronoField.YEAR),
-                api.description
+                due.get(MINUTE_OF_HOUR),
+                due.get(HOUR_OF_DAY),
+                due.get(DAY_OF_MONTH),
+                due.get(MONTH_OF_YEAR),
+                due.get(YEAR),
+                description
             )
         }
     }
