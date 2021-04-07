@@ -18,7 +18,7 @@ object CredentialsModule {
         return Credentials(
             preferences.getString("username", "")!!,
             preferences.getString("password", "")!!,
-            preferences.getString("name", context.resources.getString(R.string.unknown_username))!!
+            ""
         )
     }
 }

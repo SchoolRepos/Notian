@@ -2,14 +2,13 @@ package me.profiluefter.profinote.data.remote
 
 import me.profiluefter.profinote.data.entities.RawTodo
 import me.profiluefter.profinote.data.entities.RawTodoList
-import retrofit2.Call
 import retrofit2.http.*
 
 interface NotesAPI {
     @POST("register.php")
     suspend fun register(
         @Body credentials: Credentials
-    ): Call<UserID>
+    ): UserID
 
     // --------------------
     // Lists
@@ -20,20 +19,20 @@ interface NotesAPI {
         @Body list: RawTodoList,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<RawTodoList>
+    ): RawTodoList
 
     @GET("todolists.php")
     suspend fun getList(
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<RawTodoList>
+    ): RawTodoList
 
     @GET("todolists.php")
     suspend fun getAllLists(
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<List<RawTodoList>>
+    ): List<RawTodoList>
 
     @PUT("todolists.php")
     suspend fun editList(
@@ -41,14 +40,14 @@ interface NotesAPI {
         @Body list: RawTodoList,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<RawTodoList>
+    ): RawTodoList
 
     @DELETE("todolists.php")
     suspend fun deleteList(
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<Void>
+    ): Void
 
     // --------------------
     // Todos
@@ -59,20 +58,20 @@ interface NotesAPI {
         @Body todo: RawTodo,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<RawTodo>
+    ): RawTodo
 
     @GET("todo.php")
     suspend fun getTodo(
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<RawTodo>
+    ): RawTodo
 
     @GET("todo.php")
     suspend fun getAllTodos(
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<List<RawTodo>>
+    ): List<RawTodo>
 
     @PUT("todo.php")
     suspend fun editTodo(
@@ -80,14 +79,14 @@ interface NotesAPI {
         @Body todo: RawTodo,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<RawTodo>
+    ): RawTodo
 
     @DELETE("todo.php")
     suspend fun deleteTodo(
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Call<Void>
+    ): Void
 }
 
 data class Credentials(
@@ -98,4 +97,8 @@ data class Credentials(
 
 data class UserID(
     val userId: String
+)
+
+data class Error(
+    val message: String
 )

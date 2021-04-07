@@ -1,13 +1,10 @@
 package me.profiluefter.profinote.activities
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.PopupMenu
-import android.widget.TextView
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.data.entities.Note
@@ -57,10 +54,4 @@ class NotesAdapter(notes: List<Note>, private val activity: MainActivity) :
             }
         }
     }
-}
-
-@BindingAdapter("drawableEndCompat")
-fun setDrawableEndCompat(view: TextView, drawable: Drawable?) {
-    val (start, top, _, bottom) = view.compoundDrawables
-    view.setCompoundDrawablesRelativeWithIntrinsicBounds(start, top, drawable, bottom)
 }

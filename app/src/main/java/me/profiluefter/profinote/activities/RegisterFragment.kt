@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.navGraphViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.databinding.FragmentRegisterBinding
 import me.profiluefter.profinote.models.LoginViewModel
 
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
-    private val loginViewModel: LoginViewModel by navGraphViewModels(R.id.nav_graph)
+    private val loginViewModel: LoginViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +27,12 @@ class RegisterFragment : Fragment() {
         container,
         false
     ).apply {
+        lifecycleOwner = this@RegisterFragment
         layoutViewModel = loginViewModel
+
+        loginViewModel.state.observe(viewLifecycleOwner) {
+            if(it == LoginViewModel.LoginState.SUCCESS)
+                findNavController().navigate(RegisterFragmentDirections.registrationFinished())
+        }
     }.root
 }

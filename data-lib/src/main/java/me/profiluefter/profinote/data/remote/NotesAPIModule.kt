@@ -1,5 +1,6 @@
 package me.profiluefter.profinote.data.remote
 
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,9 +15,9 @@ import javax.inject.Singleton
 object NotesAPIModule {
     @Provides
     @Singleton
-    fun notesAPIClient(): NotesAPI = Retrofit.Builder()
-        .baseUrl("http://sickinger-solutions.at/notesserver/")
-        .addConverterFactory(GsonConverterFactory.create())
+    fun notesAPIClient(gson: Gson): NotesAPI = Retrofit.Builder()
+        .baseUrl("https://sickinger-solutions.at/notesserver/")
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
         .create()
 }

@@ -15,7 +15,6 @@ import me.profiluefter.profinote.data.remote.NotesAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.await
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -53,7 +52,7 @@ class NotesRepository @Inject constructor(
         local.todoDao().insert(rawTodo)
 
         if(isNetworkAvailable()) {
-            val newRaw = remote.newTodo(rawTodo, username, password).await()
+            val newRaw = remote.newTodo(rawTodo, username, password)
             local.todoDao().changeID(rawTodo.localID, newRaw.id)
         }
     }
@@ -65,7 +64,7 @@ class NotesRepository @Inject constructor(
         local.todoDao().update(newRaw)
 
         if(isNetworkAvailable()) {
-            remote.editTodo(newRaw.id.toInt(), newRaw, username, password).await()
+            remote.editTodo(newRaw.id.toInt(), newRaw, username, password)
         }
     }
 
