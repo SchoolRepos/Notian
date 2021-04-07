@@ -29,30 +29,16 @@ class LoginViewModel @Inject constructor(
 
     private val sharedProperties = PreferenceManager.getDefaultSharedPreferences(getApplication())
 
-    fun register() {
+    fun register() = credentialAction { username, password -> register(username, password) }
+    fun login() = credentialAction { username, password -> login(username, password) }
+
+    private fun credentialAction(block: suspend CredentialManager.(username: String, password: String)->Pair<Boolean, String?>) {
         viewModelScope.launch {
             // Saved because the user could change it during the request
             val username = username.value!!
             val password = password.value!!
 
-            val (success, error) = credentialManager.register(username, password)
-            if (success) {
-                saveCredentials(username, password)
-                state.value = SUCCESS
-            } else {
-                errorMessage.value = error
-                state.value = ERROR
-            }
-        }
-    }
-
-    fun login() {
-        viewModelScope.launch {
-            // Saved because the user could change it during the request
-            val username = username.value!!
-            val password = password.value!!
-
-            val (success, error) = credentialManager.login(username, password)
+            val (success, error) = credentialManager.block(username, password)
             if (success) {
                 saveCredentials(username, password)
                 state.value = SUCCESS

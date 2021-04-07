@@ -27,4 +27,6 @@
     <string name="register_password">Password</string>
     <string name="register_title">New Account</string>
     <string name="register_action">Register</string>
+    <string name="login_successful">Login successful!</string>
+    <string name="register_successful">Welcome to Notian!</string>
 </resources>

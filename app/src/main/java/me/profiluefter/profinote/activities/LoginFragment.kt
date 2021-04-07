@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.databinding.FragmentLoginBinding
@@ -35,8 +36,10 @@ class LoginFragment : Fragment() {
         }
 
         loginViewModel.state.observe(viewLifecycleOwner) {
-            if(it == LoginViewModel.LoginState.SUCCESS)
+            if(it == LoginViewModel.LoginState.SUCCESS) {
+                Snackbar.make(root, R.string.login_successful, Snackbar.LENGTH_LONG).show()
                 findNavController().navigate(LoginFragmentDirections.loginFinished())
+            }
         }
     }.root
 }
