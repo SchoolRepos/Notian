@@ -8,7 +8,7 @@
         <import type="me.profiluefter.profinote.data.entities.NoteKt" />
 
         <variable
-            name="viewModel"
+            name="layoutViewModel"
             type="me.profiluefter.profinote.models.MainViewModel" />
 
         <variable
@@ -28,7 +28,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:checked="@{viewModel.getLiveNote(index).done}"
+            android:checked="@{layoutViewModel.getLiveNote(index).done}"
             android:minWidth="0dp"
             android:minHeight="0dp"
             app:layout_constraintBottom_toBottomOf="@id/note_details_date"
@@ -42,7 +42,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@{viewModel.getLiveNote(index).title}"
+            android:text="@{layoutViewModel.getLiveNote(index).title}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@{NoteKt.getDate(viewModel.getLiveNote(index))}"
+            android:text="@{NoteKt.getDate(layoutViewModel.getLiveNote(index))}"
             app:layout_constraintStart_toEndOf="@id/note_details_done"
             app:layout_constraintTop_toBottomOf="@id/note_details_title"
             tools:text="@tools:sample/date/ddmmyy[0]" />
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@{NoteKt.getTime(viewModel.getLiveNote(index))}"
+            android:text="@{NoteKt.getTime(layoutViewModel.getLiveNote(index))}"
             app:layout_constraintBottom_toBottomOf="@+id/note_details_date"
             app:layout_constraintStart_toEndOf="@+id/note_details_date"
             app:layout_constraintTop_toTopOf="@+id/note_details_date"
@@ -81,7 +81,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:scrollbars="vertical"
-            android:text="@{viewModel.getLiveNote(index).description}"
+            android:text="@{layoutViewModel.getLiveNote(index).description}"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

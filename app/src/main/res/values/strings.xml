@@ -18,4 +18,13 @@
     <string name="saved_notes">Saved tasks</string>
     <string name="preferences">Preferences</string>
     <string name="unknown_username">Unknown Username</string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_title">Login</string>
+    <string name="login_action">Login</string>
+    <string name="login_register_redirect">New Account</string>
+    <string name="register_username">Username</string>
+    <string name="register_password">Password</string>
+    <string name="register_title">New Account</string>
+    <string name="register_action">Register</string>
 </resources>

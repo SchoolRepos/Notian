@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
     private val selectedListID: MutableLiveData<Int> = MutableLiveData()
 
     private val list: LiveData<TodoList> =
-        Transformations.switchMap(selectedListID) { repository.getList(it) }
+        Transformations.switchMap(selectedListID) { if (it == null) null else repository.getList(it) }
     val sortedList: LiveData<TodoList> =
         Transformations.map(list) { it.sorted() }
 

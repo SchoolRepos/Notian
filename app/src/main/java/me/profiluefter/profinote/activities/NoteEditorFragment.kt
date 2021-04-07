@@ -42,7 +42,7 @@ class NoteEditorFragment : Fragment() {
     ).apply {
         lifecycleOwner = this@NoteEditorFragment
         fragment = this@NoteEditorFragment
-        viewModel = this@NoteEditorFragment.editor
+        layoutViewModel = this@NoteEditorFragment.editor
     }.root
 
     fun saveNote() {

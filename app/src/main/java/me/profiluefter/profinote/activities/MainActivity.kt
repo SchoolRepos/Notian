@@ -6,6 +6,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,17 +22,29 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val navigation = findNavController(R.id.nav_host_fragment)
-        setupActionBarWithNavController(this, navigation)
+        setupActionBarWithNavController(
+            this,
+            navigation,
+            AppBarConfiguration.Builder(R.id.noteListFragment, R.id.loginFragment).build()
+        )
     }
 
     override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
 
     fun onEditNote(index: Int) {
-        findNavController(R.id.nav_host_fragment).navigate(NoteListFragmentDirections.openEditor(index))
+        findNavController(R.id.nav_host_fragment).navigate(
+            NoteListFragmentDirections.openEditor(
+                index
+            )
+        )
     }
 
     fun onShowNoteDetails(index: Int) {
-        findNavController(R.id.nav_host_fragment).navigate(NoteListFragmentDirections.showDetails(index))
+        findNavController(R.id.nav_host_fragment).navigate(
+            NoteListFragmentDirections.showDetails(
+                index
+            )
+        )
     }
 
     private fun onNewNote() {
