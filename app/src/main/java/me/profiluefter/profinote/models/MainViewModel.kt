@@ -16,10 +16,12 @@ private const val TAG = "MainActivityViewModel"
 class MainViewModel @Inject constructor(private val repository: NotesRepository) : ViewModel() {
     private val selectedListID: MutableLiveData<Int> = MutableLiveData()
 
+    val listNames: LiveData<List<Pair<Int, String>>> = repository.getListNames()
+
     private val list: LiveData<TodoList> =
-        Transformations.switchMap(selectedListID) { if (it == null) null else repository.getList(it) }
+        selectedListID.switchMap { repository.getList(it ?: return@switchMap MutableLiveData())  }
     val sortedList: LiveData<TodoList> =
-        Transformations.map(list) { it.sorted() }
+        Transformations.map(list) { it?.sorted() }
 
     fun deleteNote(index: Int) {
         Log.i(TAG, "Deleting note at index $index")
@@ -40,7 +42,10 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
         TODO("Not yet implemented")
     }
 
-    fun getNote(position: Int): Note = sortedList.value!!.notes[position]
+    fun selectList(listID: Int) {
+        selectedListID.value = listID
+    }
 
+    fun getNote(position: Int): Note = getLiveNote(position).value!!
     fun getLiveNote(position: Int): LiveData<Note> = sortedList.map { it.notes[position] }
 }

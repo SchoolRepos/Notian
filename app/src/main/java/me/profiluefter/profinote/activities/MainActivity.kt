@@ -1,13 +1,18 @@
 package me.profiluefter.profinote.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import me.profiluefter.profinote.R
@@ -17,22 +22,51 @@ import me.profiluefter.profinote.models.MainViewModel
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val navController: NavController
+        get() = (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+
+    private val logTag = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val navigation = findNavController(R.id.nav_host_fragment)
-        setupActionBarWithNavController(
-            this,
-            navigation,
-            AppBarConfiguration.Builder(R.id.noteListFragment, R.id.loginFragment).build()
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.noteListFragment, R.id.loginFragment),
+            findViewById<DrawerLayout>(R.id.nav_layout)
         )
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
+        val drawer = findViewById<NavigationView>(R.id.nav_drawer)
+        drawer.setupWithNavController(navController)
+
+        viewModel.listNames.observe(this) {
+            val subtitleMenu = drawer.menu.findItem(R.id.drawer_todolist_subtitle)
+            val subMenu = subtitleMenu?.subMenu
+
+            if (subMenu == null) {
+                Log.w(logTag, "MenuItem subMenu was null")
+                return@observe
+            }
+
+            subMenu.clear()
+            it.forEach { listName ->
+                val item = subMenu.add(listName.second)
+                item.setOnMenuItemClickListener {
+                    viewModel.selectList(listName.first)
+                    findViewById<DrawerLayout>(R.id.nav_layout).close()
+                    true
+                }
+            }
+        }
     }
 
-    override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
-
     fun onEditNote(index: Int) {
-        findNavController(R.id.nav_host_fragment).navigate(
+        navController.navigate(
             NoteListFragmentDirections.openEditor(
                 index
             )
@@ -40,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onShowNoteDetails(index: Int) {
-        findNavController(R.id.nav_host_fragment).navigate(
+        navController.navigate(
             NoteListFragmentDirections.showDetails(
                 index
             )
@@ -48,11 +82,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNewNote() {
-        findNavController(R.id.nav_host_fragment).navigate(NoteListFragmentDirections.openEditor(-1))
+        navController.navigate(NoteListFragmentDirections.openEditor(-1))
     }
 
     fun onSettings(item: MenuItem) {
-        findNavController(R.id.nav_host_fragment).navigate(NoteListFragmentDirections.openSettings())
+        navController.navigate(NoteListFragmentDirections.openSettings())
     }
 
     fun onNewNote(item: MenuItem) = onNewNote()

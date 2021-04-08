@@ -15,10 +15,13 @@ import javax.inject.Singleton
 @Dao
 interface ListDao {
     @Query("SELECT * FROM rawtodolist")
-    fun getAll(): LiveData<List<RawTodoList>>
+    suspend fun getAll(): List<RawTodoList>
+
+    @Query("SELECT * FROM rawtodolist")
+    fun getAllLive(): LiveData<List<RawTodoList>>
 
     @Query("SELECT * FROM rawtodolist WHERE localID = :listID")
-    fun getByLocalID(listID: Int): LiveData<RawTodoList>
+    fun getByLocalIDLive(listID: Int): LiveData<RawTodoList>
 }
 
 @Dao
@@ -26,16 +29,16 @@ interface TodoDao {
     @Insert
     suspend fun insert(rawTodo: RawTodo)
 
-    @Query("SELECT * FROM rawtodo WHERE todoListId = :listID")
-    fun getByListID(listID: Int): LiveData<List<RawTodo>>
+    @Query("SELECT * FROM rawtodo WHERE localListID = :listID")
+    fun getByListIDLive(listID: Int): LiveData<List<RawTodo>>
 
     @Query("SELECT * FROM rawtodo WHERE localID = :localID")
     suspend fun getByLocalID(localID: Int): RawTodo
 
-    @Query("DELETE FROM rawtodo WHERE id = :localID")
+    @Query("DELETE FROM rawtodo WHERE localID = :localID")
     suspend fun delete(localID: Int)
 
-    @Query("UPDATE rawtodo SET additionalData = 'DELETE' WHERE id = :localID")
+    @Query("UPDATE rawtodo SET additionalData = 'DELETE' WHERE localID = :localID")
     suspend fun scheduleDelete(localID: Int)
 
     @Update

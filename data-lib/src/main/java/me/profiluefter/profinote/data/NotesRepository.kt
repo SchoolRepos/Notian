@@ -29,11 +29,12 @@ class NotesRepository @Inject constructor(
     private val password: String
         get() = credentials.get().password
 
-    fun getList(localID: Int): LiveData<TodoList> = local.listDao().getByLocalID(localID).switchMap { list ->
-        local.todoDao().getByListID(localID).map { todos ->
-            TodoList.from(list, todos)
+    fun getList(localID: Int): LiveData<TodoList> =
+        local.listDao().getByLocalIDLive(localID).switchMap { list ->
+            local.todoDao().getByListIDLive(localID).map { todos ->
+                TodoList.from(list, todos)
+            }
         }
-    }
 
     suspend fun deleteNote(note: Note) {
         local.todoDao().delete(note.localID)
@@ -46,12 +47,12 @@ class NotesRepository @Inject constructor(
 
     suspend fun addNote(pair: Pair<Note, TodoList>) {
         val (note, list) = pair
-        val rawList = local.listDao().getByLocalID(list.localID).value!!
+        val rawList = local.listDao().getByLocalIDLive(list.localID).value!!
         val rawTodo = note.toRaw("NEW", rawList)
 
         local.todoDao().insert(rawTodo)
 
-        if(isNetworkAvailable()) {
+        if (isNetworkAvailable()) {
             val newRaw = remote.newTodo(rawTodo, username, password)
             local.todoDao().changeID(rawTodo.localID, newRaw.id)
         }
@@ -59,11 +60,11 @@ class NotesRepository @Inject constructor(
 
     suspend fun updateNote(note: Note) {
         val previousRaw = local.todoDao().getByLocalID(note.localID)
-        val rawList = local.listDao().getByLocalID(previousRaw.localListID).value!!
+        val rawList = local.listDao().getByLocalIDLive(previousRaw.localListID).value!!
         val newRaw = note.toRaw(previousRaw.id, rawList)
         local.todoDao().update(newRaw)
 
-        if(isNetworkAvailable()) {
+        if (isNetworkAvailable()) {
             remote.editTodo(newRaw.id.toInt(), newRaw, username, password)
         }
     }
@@ -72,7 +73,7 @@ class NotesRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    suspend fun getAvailableNoteID(): Int = local.todoDao().nextAvailableID()
+    suspend fun getAvailableTodoID(): Int = local.todoDao().nextAvailableID()
 
     private fun isNetworkAvailable(): Boolean =
         context.getSystemService(ConnectivityManager::class.java).run {
@@ -82,6 +83,9 @@ class NotesRepository @Inject constructor(
                         hasTransport(TRANSPORT_ETHERNET)
             } ?: false
         }
+
+    fun getListNames(): LiveData<List<Pair<Int, String>>> =
+        local.listDao().getAllLive().map { lists -> lists.map { it.localID to it.name } }
 }
 
 private fun <T> retrofitErrorCallback(onError: (Throwable) -> Unit): Callback<T> =
