@@ -25,8 +25,7 @@ class NoteEditorFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private val editor: NoteEditorViewModel by viewModels {
         NoteEditorViewModelFactory(
-            if (args.index == -1) null else viewModel.getNote(args.index),
-            args.index
+            args.note
         )
     }
 
@@ -46,7 +45,10 @@ class NoteEditorFragment : Fragment() {
     }.root
 
     fun saveNote() {
-        viewModel.setNote(args.index, editor.note)
+        if (editor.localID == 0)
+            viewModel.addNote(editor.note)
+        else
+            viewModel.setNote(editor.note)
         findNavController().navigateUp()
     }
 

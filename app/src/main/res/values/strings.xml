@@ -30,4 +30,5 @@
     <string name="login_successful">Login successful!</string>
     <string name="register_successful">Welcome to Notian!</string>
     <string name="drawer_todolists">Lists</string>
+    <string name="synchronize">Synchronize</string>
 </resources>

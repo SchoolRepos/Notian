@@ -40,9 +40,9 @@ class NotesAdapter(notes: List<Note>, private val activity: MainActivity) :
                 menu.inflate(R.menu.note_action_menu)
                 menu.setOnMenuItemClickListener {
                     when(it.itemId) {
-                        R.id.note_action_edit -> activity.onEditNote(this.adapterPosition)
-                        R.id.note_action_details -> activity.onShowNoteDetails(this.adapterPosition)
-                        R.id.note_action_delete -> activity.onDeleteNote(this.adapterPosition, view)
+                        R.id.note_action_edit -> activity.onEditNote(binding.note!!)
+                        R.id.note_action_details -> activity.onShowNoteDetails(binding.note!!)
+                        R.id.note_action_delete -> activity.onDeleteNote(binding.note!!)
                     }
                     true
                 }
@@ -50,7 +50,7 @@ class NotesAdapter(notes: List<Note>, private val activity: MainActivity) :
                 true
             }
             view.findViewById<CheckBox>(R.id.itemDone).setOnCheckedChangeListener { _, checked ->
-                activity.setNoteChecked(this.adapterPosition, checked)
+                activity.setNoteChecked(binding.note!!, checked)
             }
         }
     }

@@ -27,11 +27,11 @@ class NoteDetailsFragment : Fragment() {
         false
     ).apply {
         lifecycleOwner = this@NoteDetailsFragment
-        layoutViewModel = this@NoteDetailsFragment.viewModel
-        index = args.index
+        layoutViewModel = viewModel
+        note = args.note
 
         noteDetailsDone.setOnCheckedChangeListener { _, checked ->
-            viewModel.setNoteChecked(args.index, checked)
+            viewModel.setNoteChecked(note!!, checked)
         }
     }.root
 }

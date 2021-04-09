@@ -14,6 +14,9 @@ import javax.inject.Singleton
 
 @Dao
 interface ListDao {
+    @Insert
+    suspend fun insert(lists: List<RawTodoList>)
+
     @Query("SELECT * FROM rawtodolist")
     suspend fun getAll(): List<RawTodoList>
 
@@ -22,6 +25,18 @@ interface ListDao {
 
     @Query("SELECT * FROM rawtodolist WHERE localID = :listID")
     fun getByLocalIDLive(listID: Int): LiveData<RawTodoList>
+
+    @Query("SELECT * FROM rawtodolist WHERE localID = :listID")
+    suspend fun getByLocalID(listID: Int): RawTodoList
+
+    @Query("SELECT localID FROM rawtodolist WHERE id = :todoListId")
+    suspend fun getLocalIDByRemoteID(todoListId: String): Int
+
+    @Update
+    suspend fun update(list: List<RawTodoList>)
+
+    @Query("UPDATE rawtodolist SET id = :id WHERE localID = :localID")
+    suspend fun changeID(localID: Int, id: String)
 }
 
 @Dao
@@ -29,26 +44,35 @@ interface TodoDao {
     @Insert
     suspend fun insert(rawTodo: RawTodo)
 
+    @Insert
+    suspend fun insert(rawTodo: List<RawTodo>)
+
+    @Query("SELECT * FROM rawtodo")
+    suspend fun getAll(): List<RawTodo>
+
     @Query("SELECT * FROM rawtodo WHERE localListID = :listID")
     fun getByListIDLive(listID: Int): LiveData<List<RawTodo>>
 
     @Query("SELECT * FROM rawtodo WHERE localID = :localID")
     suspend fun getByLocalID(localID: Int): RawTodo
 
-    @Query("DELETE FROM rawtodo WHERE localID = :localID")
-    suspend fun delete(localID: Int)
+    @Update
+    suspend fun update(rawTodo: RawTodo)
+
+    @Update
+    suspend fun update(list: List<RawTodo>)
 
     @Query("UPDATE rawtodo SET additionalData = 'DELETE' WHERE localID = :localID")
     suspend fun scheduleDelete(localID: Int)
 
-    @Update
-    suspend fun update(rawTodo: RawTodo)
+    @Query("UPDATE rawtodo SET state = CASE WHEN :checked = 1 THEN 'DONE' ELSE 'TODO' END WHERE localID = :localID")
+    suspend fun setChecked(localID: Int, checked: Boolean)
 
     @Query("UPDATE rawtodo SET id = :id WHERE localID = :localID")
     suspend fun changeID(localID: Int, id: String)
 
-    @Query("SELECT MAX(localID) + 1 FROM rawtodo")
-    suspend fun nextAvailableID(): Int
+    @Delete
+    suspend fun delete(rawTodo: RawTodo)
 }
 
 @Database(entities = [RawTodoList::class, RawTodo::class], version = 1)

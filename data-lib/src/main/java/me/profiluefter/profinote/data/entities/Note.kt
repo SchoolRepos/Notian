@@ -4,7 +4,6 @@ import java.io.Serializable
 import java.time.LocalDateTime
 import java.time.temporal.ChronoField.*
 import java.util.*
-import java.util.Calendar.getInstance
 
 data class Note(
     val localID: Int,
@@ -17,6 +16,18 @@ data class Note(
     val year: Int,
     val description: String
 ) : Serializable, Comparable<Note> {
+    constructor(calendar: Calendar = Calendar.getInstance()) : this(
+        0,
+        "",
+        false,
+        calendar.get(Calendar.MINUTE),
+        calendar.get(Calendar.HOUR_OF_DAY),
+        calendar.get(Calendar.DAY_OF_MONTH),
+        calendar.get(Calendar.MONTH) + 1,
+        calendar.get(Calendar.YEAR),
+        ""
+    )
+
     override fun compareTo(other: Note): Int {
         return this.due.compareTo(other.due)
     }
@@ -39,11 +50,15 @@ data class Note(
             val due = apiPattern.parse(dueDate)
 
             return Note(
-                id.toInt(),
+                localID,
                 title,
-                when(state) {
-                    "DONE" -> true
+                when (state.toUpperCase(Locale.ROOT)) {
                     "TODO" -> false
+                    "OPEN" -> false
+
+                    "DONE" -> true
+                    "FINISHED" -> true
+
                     else -> throw IllegalStateException("Unknown Todo state \"$state\"")
                 },
                 due.get(MINUTE_OF_HOUR),
@@ -58,7 +73,7 @@ data class Note(
 }
 
 val Note.isOverdue: Boolean
-    get() = !done && getInstance().after(due)
+    get() = !done && Calendar.getInstance().after(due)
 
 private fun pad(value: Any) = value.toString().padStart(2, '0')
 
@@ -74,7 +89,7 @@ fun formatTime(hour: Int, minute: Int) = "${pad(hour)}:${pad(minute)}"
 
 val Note.due: Calendar
     get() {
-        val calendar = getInstance()
+        val calendar = Calendar.getInstance()
         calendar.clear()
         calendar.set(year, month - 1, day, hour, minute)
         return calendar

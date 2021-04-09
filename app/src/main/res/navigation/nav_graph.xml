@@ -27,8 +27,8 @@
         android:label="@string/note_action_details"
         tools:layout="@layout/fragment_note_details">
         <argument
-            android:name="index"
-            app:argType="integer" />
+            android:name="note"
+            app:argType="me.profiluefter.profinote.data.entities.Note" />
     </fragment>
 
     <fragment
@@ -37,9 +37,8 @@
         android:label="@string/note_action_edit"
         tools:layout="@layout/fragment_note_editor">
         <argument
-            android:name="index"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            android:name="note"
+            app:argType="me.profiluefter.profinote.data.entities.Note" />
     </fragment>
 
     <fragment

@@ -47,7 +47,7 @@ interface NotesAPI {
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Void
+    )
 
     // --------------------
     // Todos
@@ -86,7 +86,7 @@ interface NotesAPI {
         @Query("id") id: Int,
         @Query("username") username: String,
         @Query("password") password: String
-    ): Void
+    )
 }
 
 data class Credentials(

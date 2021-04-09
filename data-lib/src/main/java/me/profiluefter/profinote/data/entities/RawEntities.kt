@@ -4,11 +4,18 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import me.profiluefter.profinote.data.LocalOnly
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalQueries
 
 @Entity
 data class RawTodoList(
-    @LocalOnly @PrimaryKey val localID: Int,
+    @LocalOnly @PrimaryKey(autoGenerate = true) val localID: Int,
+    /**
+     * ID that the server assigns to each Entity. Set to "NEW" if the
+     * server-assigned id is not known yet because the entity has not
+     * been synchronized yet.
+     */
     val id: String,
     @Ignore val ownerId: String,
     val name: String,
@@ -38,7 +45,12 @@ data class RawTodoList(
 
 @Entity
 data class RawTodo(
-    @LocalOnly @PrimaryKey val localID: Int,
+    @LocalOnly @PrimaryKey(autoGenerate = true) val localID: Int,
+    /**
+     * ID that the server assigns to each Entity. Set to "NEW" if the
+     * server-assigned id is not known yet because the entity has not
+     * been synchronized yet.
+     */
     val id: String,
     @Ignore val ownerId: String,
     @LocalOnly val localListID: Int,
@@ -46,6 +58,12 @@ data class RawTodo(
     val title: String,
     val description: String,
     val dueDate: String,
+    /**
+     * The current state of the task.
+     *
+     * Is set to either "TODO" if the task is outstanding or "DONE" if
+     * the task is already marked as completed.
+     */
     val state: String,
     /**
      * Used for conflict resolution when synchronizing.
@@ -79,6 +97,45 @@ data class RawTodo(
         state,
         additionalData
     )
+
+    constructor(serverResponse: RawTodo, localListID: Int) : this(
+        serverResponse.localID,
+        serverResponse.id,
+        serverResponse.ownerId,
+        localListID,
+        serverResponse.todoListId,
+        serverResponse.title,
+        serverResponse.description,
+        serverResponse.dueDate,
+        serverResponse.state,
+        serverResponse.additionalData
+    )
 }
 
 val apiPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+fun RawTodoList.serverEquals(other: RawTodoList): Boolean =
+    this.id == other.id && this.name == other.name && this.additionalData == other.additionalData
+
+fun RawTodoList.localEquals(other: RawTodoList): Boolean =
+    this.localID == other.localID && this.name == other.name && this.additionalData == other.additionalData
+
+fun RawTodo.serverEquals(other: RawTodo): Boolean =
+    this.id == other.id && this.todoListId == other.todoListId &&
+            this.title == other.title && this.description == other.description &&
+            this.dueDate == other.dueDate && this.state == other.dueDate && this.additionalData == other.additionalData
+
+fun RawTodo.localEquals(other: RawTodo): Boolean =
+    this.localID == other.localID && this.localListID == other.localListID &&
+            this.title == other.title && this.description == other.description &&
+            this.dueDate == other.dueDate && this.state == other.dueDate && this.additionalData == other.additionalData
+
+fun RawTodoList.changedDate(): LocalDateTime = parseAdditionalData(additionalData)
+fun RawTodo.changedDate(): LocalDateTime = parseAdditionalData(additionalData)
+
+fun parseAdditionalData(additionalData: String): LocalDateTime {
+    val accessor = apiPattern.parse(additionalData)
+    val date = accessor.query(TemporalQueries.localDate())
+    val time = accessor.query(TemporalQueries.localTime())
+    return date.atTime(time)
+}

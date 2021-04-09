@@ -9,6 +9,11 @@
         android:titleCondensed="@string/new_note_condensed"
         app:showAsAction="ifRoom|withText" />
     <item
+        android:icon="@drawable/baseline_sync_24"
+        android:onClick="onSynchronize"
+        android:title="@string/synchronize"
+        app:showAsAction="ifRoom|withText" />
+    <item
         android:icon="@drawable/baseline_settings_24"
         android:onClick="onSettings"
         android:title="@string/preferences"

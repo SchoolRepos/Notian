@@ -16,6 +16,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import me.profiluefter.profinote.R
+import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.models.MainViewModel
 
 @AndroidEntryPoint
@@ -65,24 +66,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onEditNote(index: Int) {
+    fun onEditNote(note: Note) {
         navController.navigate(
             NoteListFragmentDirections.openEditor(
-                index
+                viewModel.refreshNote(note)
             )
         )
     }
 
-    fun onShowNoteDetails(index: Int) {
+    fun onShowNoteDetails(note: Note) {
         navController.navigate(
             NoteListFragmentDirections.showDetails(
-                index
+                viewModel.refreshNote(note)
             )
         )
     }
 
     private fun onNewNote() {
-        navController.navigate(NoteListFragmentDirections.openEditor(-1))
+        navController.navigate(NoteListFragmentDirections.openEditor(Note()))
     }
 
     fun onSettings(item: MenuItem) {
@@ -91,14 +92,16 @@ class MainActivity : AppCompatActivity() {
 
     fun onNewNote(item: MenuItem) = onNewNote()
 
-    fun onDeleteNote(index: Int, view: View) {
-        val note = viewModel.getNote(index)
+    fun onDeleteNote(note: Note) {
+        viewModel.deleteNote(note)
 
-        viewModel.deleteNote(index)
-
-        Snackbar.make(view, R.string.note_deleted, Snackbar.LENGTH_SHORT).apply {
+        Snackbar.make(
+            findViewById(R.id.nav_host_fragment),
+            R.string.note_deleted,
+            Snackbar.LENGTH_SHORT
+        ).apply {
             setAction(R.string.undo) {
-                viewModel.setNote(-1, note)
+                viewModel.addNote(note)
             }
             show()
         }
@@ -106,7 +109,12 @@ class MainActivity : AppCompatActivity() {
 
     fun onNewNote(view: View) = onNewNote()
 
-    fun setNoteChecked(index: Int, checked: Boolean) {
-        viewModel.setNoteChecked(index, checked)
+    fun setNoteChecked(note: Note, checked: Boolean) {
+        if (note.done == checked) return
+        viewModel.setNoteChecked(note, checked)
+    }
+
+    fun onSynchronize(item: MenuItem) {
+        viewModel.synchronize()
     }
 }

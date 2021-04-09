@@ -22,10 +22,8 @@ data class TodoList(
     )
 
     companion object {
-        fun default(id: Int): TodoList = TodoList(id, "Default", emptyList())
-
         fun from(list: RawTodoList, todos: List<RawTodo>): TodoList = TodoList(
-            list.id.toInt(),
+            list.localID,
             list.name,
             todos.map { Note.from(it) }
         )
