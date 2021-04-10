@@ -18,6 +18,8 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
 
     private val list: LiveData<TodoList> = selectedListID
         .switchMap { repository.getList(it ?: return@switchMap MutableLiveData()) }
+
+    @Suppress("UNNECESSARY_SAFE_CALL") // LiveData is nullable
     val sortedList: LiveData<TodoList> = list.map { it?.sorted() }
 
     private val logTag = "MainViewModel"

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:icon="@drawable/sharp_add_task_24"
-        android:onClick="onNewNote"
+        android:id="@+id/menu_new_task"
         android:title="@string/new_note"
         android:titleCondensed="@string/new_note_condensed"
         app:showAsAction="ifRoom|withText" />
     <item
         android:icon="@drawable/baseline_sync_24"
-        android:onClick="onSynchronize"
+        android:id="@+id/menu_synchronize"
         android:title="@string/synchronize"
         app:showAsAction="ifRoom|withText" />
     <item
         android:icon="@drawable/baseline_settings_24"
-        android:onClick="onSettings"
+        android:id="@+id/menu_preferences"
         android:title="@string/preferences"
         app:showAsAction="never" />
 </menu>

@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,7 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.snackbar.Snackbar
 import me.profiluefter.profinote.R
+import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.databinding.FragmentNoteListBinding
 import me.profiluefter.profinote.models.MainViewModel
 
@@ -44,7 +48,9 @@ class NoteListFragment : Fragment() {
 
         val adapter = NotesAdapter(
             viewModel.sortedList.value?.notes ?: emptyList(),
-            requireActivity() as MainActivity
+            ::showNoteDetails,
+            ::createPopupMenu,
+            ::checkedChange
         )
         this.notes.adapter = adapter
         this.notes.addItemDecoration(
@@ -71,6 +77,44 @@ class NoteListFragment : Fragment() {
         setHasOptionsMenu(true)
     }.root
 
+    private fun showNoteDetails(note: Note) = View.OnClickListener {
+        findNavController().navigate(
+            NoteListFragmentDirections.showDetails(viewModel.refreshNote(note))
+        )
+    }
+
+    private fun checkedChange(note: Note) = CompoundButton.OnCheckedChangeListener { _, checked ->
+        if (note.done == checked) return@OnCheckedChangeListener
+        viewModel.setNoteChecked(note, checked)
+    }
+
+    private fun createPopupMenu(note: Note) = View.OnLongClickListener { view ->
+        fun deleteNote() {
+            viewModel.deleteNote(note)
+
+            val bar = Snackbar.make(requireView(), R.string.note_deleted, Snackbar.LENGTH_SHORT)
+            bar.setAction(R.string.undo) {
+                viewModel.addNote(note)
+            }
+            bar.show()
+        }
+
+        val menu = PopupMenu(requireContext(), view)
+        menu.inflate(R.menu.note_action_menu)
+        menu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.note_action_edit -> findNavController().navigate(
+                    NoteListFragmentDirections.openEditor(viewModel.refreshNote(note))
+                )
+                R.id.note_action_details -> showNoteDetails(note).onClick(view)
+                R.id.note_action_delete -> deleteNote()
+            }
+            true
+        }
+        menu.show()
+        true
+    }
+
     @SuppressLint("RestrictedApi") // https://stackoverflow.com/q/48607853
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
@@ -80,5 +124,16 @@ class NoteListFragment : Fragment() {
         }
 
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val nav = findNavController()
+        when (item.itemId) {
+            R.id.menu_new_task -> nav.navigate(NoteListFragmentDirections.openEditor(Note()))
+            R.id.menu_synchronize -> viewModel.synchronize()
+            R.id.menu_preferences -> nav.navigate(NoteListFragmentDirections.openSettings())
+            else -> return false
+        }
+        return true
     }
 }

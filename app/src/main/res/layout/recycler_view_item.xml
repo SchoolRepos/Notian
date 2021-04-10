@@ -12,17 +12,12 @@
         <variable
             name="note"
             type="me.profiluefter.profinote.data.entities.Note" />
-
-        <variable
-            name="position"
-            type="int" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:longClickable="true"
-        android:onClick="@{view -> ((MainActivity) view.context).onShowNoteDetails(note)}">
+        android:longClickable="true">
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/itemDone"

@@ -43,8 +43,13 @@ class NotesRepository @Inject constructor(
         val rawNote = local.todoDao().getByLocalID(note.localID)
 
         if (isNetworkAvailable()) {
-            remote.deleteTodo(rawNote.id.toInt(), username, password)
             local.todoDao().delete(rawNote)
+            try {
+                remote.deleteTodo(rawNote.id.toInt(), username, password)
+            } catch (e: Exception) {
+                local.todoDao().insert(rawNote)
+                throw RuntimeException("Error while deleting note $note from server", e)
+            }
         } else
             local.todoDao().scheduleDelete(note.localID)
     }
