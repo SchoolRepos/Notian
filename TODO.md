@@ -1,7 +1,6 @@
 # Bugs
 
 * overflow menu settings icon white on white when light theme
-* newly created todo doubles after synchronization
 
 # Minor improvements
 

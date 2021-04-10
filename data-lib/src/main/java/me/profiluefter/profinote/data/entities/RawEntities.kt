@@ -123,12 +123,12 @@ fun RawTodoList.localEquals(other: RawTodoList): Boolean =
 fun RawTodo.serverEquals(other: RawTodo): Boolean =
     this.id == other.id && this.todoListId == other.todoListId &&
             this.title == other.title && this.description == other.description &&
-            this.dueDate == other.dueDate && this.state == other.dueDate && this.additionalData == other.additionalData
+            this.dueDate == other.dueDate && this.state == other.state && this.additionalData == other.additionalData
 
 fun RawTodo.localEquals(other: RawTodo): Boolean =
     this.localID == other.localID && this.localListID == other.localListID &&
             this.title == other.title && this.description == other.description &&
-            this.dueDate == other.dueDate && this.state == other.dueDate && this.additionalData == other.additionalData
+            this.dueDate == other.dueDate && this.state == other.state && this.additionalData == other.additionalData
 
 fun RawTodoList.changedDate(): LocalDateTime = parseAdditionalData(additionalData)
 fun RawTodo.changedDate(): LocalDateTime = parseAdditionalData(additionalData)

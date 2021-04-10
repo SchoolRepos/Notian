@@ -15,6 +15,7 @@ import me.profiluefter.profinote.data.remote.NotesAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -53,11 +54,11 @@ class NotesRepository @Inject constructor(
         val rawList = local.listDao().getByLocalID(list.localID)
         val rawTodo = note.toRaw("NEW", rawList)
 
-        local.todoDao().insert(rawTodo)
+        val newLocalID = local.todoDao().insert(rawTodo).toInt()
 
         if (isNetworkAvailable()) {
-            val newRaw = remote.newTodo(rawTodo, username, password)
-            local.todoDao().changeID(rawTodo.localID, newRaw.id)
+            val (_, newRemoteID) = remote.newTodo(rawTodo, username, password)
+            local.todoDao().changeID(newLocalID, newRemoteID)
         }
     }
 
@@ -79,6 +80,8 @@ class NotesRepository @Inject constructor(
         synchronizeTodos()
         Log.i(logTag, "Finished synchronization!")
     }
+
+    //TODO: merge synchronizeLists() and synchronizeTodos()
 
     private suspend fun synchronizeLists() {
         val localLists = local.listDao().getAll()
@@ -111,17 +114,17 @@ class NotesRepository @Inject constructor(
         val mergedLists = mergeLists.map { remote ->
             remote to remainingLists.find { local -> local.id == remote.id }!!
         }.map {
-            val (remote, local) = it
-            val localChangeDate = local.changedDate()
-            val remoteChangeDate = remote.changedDate()
+            val (remoteEntity, localEntity) = it
+            val localChangeDate = localEntity.changedDate()
+            val remoteChangeDate = remoteEntity.changedDate()
             val localNewer = localChangeDate.isAfter(remoteChangeDate)
 
             RawTodoList(
-                local.localID,
-                remote.id,
-                remote.ownerId,
-                if (localNewer) local.name else remote.name,
-                if (localNewer) local.additionalData else remote.additionalData
+                localEntity.localID,
+                remoteEntity.id,
+                remoteEntity.ownerId,
+                if (localNewer) localEntity.name else remoteEntity.name,
+                apiPattern.format(LocalDateTime.now())
             )
         }
         Log.d(logTag, "Merged ${mergedLists.size} todo list")
@@ -176,20 +179,21 @@ class NotesRepository @Inject constructor(
             RawTodo(remote, local.listDao().getLocalIDByRemoteID(remote.todoListId)) to
                     remainingTodos.find { local -> local.id == remote.id }!!
         }.map {
-            val (remote, local) = it
-            val localNewer = local.changedDate().isAfter(remote.changedDate())
+            val (remoteEntity, localEntity) = it
+            val localNewer = localEntity.changedDate().isAfter(remoteEntity.changedDate())
 
             RawTodo(
-                local.localID,
-                remote.id,
-                remote.ownerId,
-                if (localNewer) local.localListID else remote.localListID,
-                if (localNewer) local.todoListId else remote.todoListId,
-                if (localNewer) local.title else remote.title,
-                if (localNewer) local.description else remote.description,
-                if (localNewer) local.dueDate else remote.dueDate,
-                if (localNewer) local.state else remote.state,
-                if (localNewer) local.additionalData else remote.additionalData
+                localEntity.localID,
+                remoteEntity.id,
+                remoteEntity.ownerId,
+                if (localNewer) localEntity.localListID else local.listDao()
+                    .getLocalIDByRemoteID(remoteEntity.todoListId),
+                if (localNewer) localEntity.todoListId else remoteEntity.todoListId,
+                if (localNewer) localEntity.title else remoteEntity.title,
+                if (localNewer) localEntity.description else remoteEntity.description,
+                if (localNewer) localEntity.dueDate else remoteEntity.dueDate,
+                if (localNewer) localEntity.state else remoteEntity.state,
+                apiPattern.format(LocalDateTime.now())
             )
         }
         Log.d(logTag, "Merged ${mergedTodos.size} todos")

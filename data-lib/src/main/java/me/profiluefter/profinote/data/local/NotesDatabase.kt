@@ -42,7 +42,7 @@ interface ListDao {
 @Dao
 interface TodoDao {
     @Insert
-    suspend fun insert(rawTodo: RawTodo)
+    suspend fun insert(rawTodo: RawTodo): Long
 
     @Insert
     suspend fun insert(rawTodo: List<RawTodo>)
