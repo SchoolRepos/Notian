@@ -134,8 +134,12 @@ fun RawTodoList.changedDate(): LocalDateTime = parseAdditionalData(additionalDat
 fun RawTodo.changedDate(): LocalDateTime = parseAdditionalData(additionalData)
 
 fun parseAdditionalData(additionalData: String): LocalDateTime {
-    val accessor = apiPattern.parse(additionalData)
-    val date = accessor.query(TemporalQueries.localDate())
-    val time = accessor.query(TemporalQueries.localTime())
-    return date.atTime(time)
+    return try {
+        val accessor = apiPattern.parse(additionalData)
+        val date = accessor.query(TemporalQueries.localDate())
+        val time = accessor.query(TemporalQueries.localTime())
+        date.atTime(time)
+    } catch (e: Exception) {
+        LocalDateTime.MIN
+    }
 }
