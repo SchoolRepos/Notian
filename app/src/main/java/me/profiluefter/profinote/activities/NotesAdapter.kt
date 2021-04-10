@@ -3,7 +3,6 @@ package me.profiluefter.profinote.activities
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import me.profiluefter.profinote.R

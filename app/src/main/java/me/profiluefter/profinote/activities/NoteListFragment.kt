@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import me.profiluefter.profinote.R
@@ -17,6 +18,7 @@ import me.profiluefter.profinote.models.MainViewModel
 
 class NoteListFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
+    private val args: NoteListFragmentArgs by navArgs()
 
     private val logTag = "NoteListFragment"
 
@@ -51,6 +53,9 @@ class NoteListFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        if (args.listID != -1)
+            viewModel.selectList(args.listID)
 
         setHasOptionsMenu(true)
     }.root

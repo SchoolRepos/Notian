@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             it.forEach { listName ->
                 val item = subMenu.add(listName.second)
                 item.setOnMenuItemClickListener {
-                    viewModel.selectList(listName.first)
+                    navController.navigate(NoteListFragmentDirections.changeCurrentList(listName.first))
                     findViewById<DrawerLayout>(R.id.nav_layout).close()
                     true
                 }
