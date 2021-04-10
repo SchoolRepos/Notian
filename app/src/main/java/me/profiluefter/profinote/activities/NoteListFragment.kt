@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -36,23 +37,33 @@ class NoteListFragment : Fragment() {
         layoutViewModel = this@NoteListFragment.viewModel
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        if(!preferences.contains("username") || !preferences.contains("password")) {
+        if (!preferences.contains("username") || !preferences.contains("password")) {
             Log.i(logTag, "User not authenticated. Redirecting to login...")
             findNavController().navigate(NoteListFragmentDirections.startLogin())
         }
 
-        val adapter = NotesAdapter(viewModel.sortedList.value?.notes ?: emptyList(), requireActivity() as MainActivity)
-        viewModel.sortedList.observe(viewLifecycleOwner) {
-            adapter.notes = it?.notes ?: emptyList()
-        }
-
+        val adapter = NotesAdapter(
+            viewModel.sortedList.value?.notes ?: emptyList(),
+            requireActivity() as MainActivity
+        )
         this.notes.adapter = adapter
         this.notes.addItemDecoration(
             DividerItemDecoration(
-                this.notes.context,
+                requireContext(),
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.title =
+            viewModel.sortedList.value?.name ?: getString(R.string.app_name)
+
+        viewModel.sortedList.observe(viewLifecycleOwner) {
+            adapter.notes = it?.notes ?: emptyList()
+
+            @Suppress("USELESS_ELVIS") // `it` is nullable!
+            (requireActivity() as AppCompatActivity).supportActionBar?.title =
+                it.name ?: getString(R.string.app_name)
+        }
 
         if (args.listID != -1)
             viewModel.selectList(args.listID)

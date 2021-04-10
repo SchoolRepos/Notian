@@ -38,7 +38,7 @@ class NotesAdapter(notes: List<Note>, private val activity: MainActivity) :
                 val menu = PopupMenu(activity, view)
                 menu.inflate(R.menu.note_action_menu)
                 menu.setOnMenuItemClickListener {
-                    when(it.itemId) {
+                    when (it.itemId) {
                         R.id.note_action_edit -> activity.onEditNote(binding.note!!)
                         R.id.note_action_details -> activity.onShowNoteDetails(binding.note!!)
                         R.id.note_action_delete -> activity.onDeleteNote(binding.note!!)
@@ -48,7 +48,7 @@ class NotesAdapter(notes: List<Note>, private val activity: MainActivity) :
                 menu.show()
                 true
             }
-            view.findViewById<CheckBox>(R.id.itemDone).setOnCheckedChangeListener { _, checked ->
+            binding.itemDone.setOnCheckedChangeListener { _, checked ->
                 activity.setNoteChecked(binding.note!!, checked)
             }
         }
