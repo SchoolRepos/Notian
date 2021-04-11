@@ -1,6 +1,8 @@
 package me.profiluefter.profinote.models
 
+import android.content.SharedPreferences
 import android.util.Log
+import androidx.core.content.edit
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -59,12 +61,15 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
         selectedListID.value = listID
     }
 
-    fun addList(listName: String) {
+    fun addList(listName: String, preferences: SharedPreferences) {
         Log.i(logTag, "Adding new list $list")
         GlobalScope.launch {
             val newListID = repository.addList(listName)
             withContext(Dispatchers.Main) {
                 selectList(newListID)
+            }
+            preferences.edit {
+                putInt("listID", newListID)
             }
         }
     }
@@ -77,7 +82,5 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
     }
 
     fun refreshNote(note: Note): Note =
-        list.value!!.notes.find {
-                it.localID == note.localID
-            }!!
+        list.value!!.notes.find { it.localID == note.localID }!!
 }

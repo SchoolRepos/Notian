@@ -9,6 +9,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,6 +31,8 @@ class NoteListFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private val args: NoteListFragmentArgs by navArgs()
 
+    private val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(requireContext()) }
+
     private val logTag = "NoteListFragment"
 
     override fun onCreateView(
@@ -45,11 +48,14 @@ class NoteListFragment : Fragment() {
         lifecycleOwner = this@NoteListFragment
         layoutViewModel = this@NoteListFragment.viewModel
 
-        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (!preferences.contains("username") || !preferences.contains("password")) {
             Log.i(logTag, "User not authenticated. Redirecting to login...")
             findNavController().navigate(NoteListFragmentDirections.startLogin())
         }
+
+        val lastListID = preferences.getInt("listID", -1)
+        if (lastListID != -1)
+            viewModel.selectList(lastListID)
 
         floatingActionButton.setOnClickListener {
             findNavController().navigate(NoteListFragmentDirections.openEditor(Note()))
@@ -80,8 +86,12 @@ class NoteListFragment : Fragment() {
                 it.name ?: getString(R.string.app_name)
         }
 
-        if (args.listID != -1)
+        if (args.listID != -1) {
             viewModel.selectList(args.listID)
+            preferences.edit {
+                putInt("listID", args.listID)
+            }
+        }
 
         setHasOptionsMenu(true)
     }.root
@@ -162,7 +172,7 @@ class NoteListFragment : Fragment() {
             }
             .setPositiveButton(R.string.create) { dialog, _ ->
                 val listName = editText.text.toString()
-                viewModel.addList(listName)
+                viewModel.addList(listName, preferences)
                 dialog.dismiss()
             }
             .show()
