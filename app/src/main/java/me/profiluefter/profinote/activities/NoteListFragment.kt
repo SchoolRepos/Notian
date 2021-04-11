@@ -1,6 +1,7 @@
 package me.profiluefter.profinote.activities
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -8,6 +9,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,7 +17,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.databinding.FragmentNoteListBinding
@@ -135,9 +140,39 @@ class NoteListFragment : Fragment() {
         when (item.itemId) {
             R.id.menu_new_task -> nav.navigate(NoteListFragmentDirections.openEditor(Note()))
             R.id.menu_synchronize -> viewModel.synchronize()
+            R.id.menu_new_list -> createNewTaskList()
             R.id.menu_preferences -> nav.navigate(NoteListFragmentDirections.openSettings())
             else -> return false
         }
         return true
+    }
+
+    private fun createNewTaskList() {
+        val container = TextInputLayout(requireContext()).apply {
+            setStartIconDrawable(R.drawable.baseline_new_label_24)
+            setHint(R.string.list_name)
+        }
+        val editText = TextInputEditText(container.context)
+        container.addView(editText)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(container)
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(R.string.create) { dialog, _ ->
+                val listName = editText.text.toString()
+                viewModel.addList(listName)
+                dialog.dismiss()
+            }
+            .show()
+
+        val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        positiveButton.isEnabled = false
+        editText.doOnTextChanged { text, _, _, _ ->
+            positiveButton.isEnabled = text?.isNotBlank() ?: false
+        }
+
+        editText.requestFocus()
     }
 }

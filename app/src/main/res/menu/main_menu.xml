@@ -14,6 +14,11 @@
         android:title="@string/synchronize"
         app:showAsAction="ifRoom|withText" />
     <item
+        android:id="@+id/menu_new_list"
+        android:icon="@drawable/baseline_add_24"
+        android:title="@string/new_task_list"
+        app:showAsAction="never" />
+    <item
         android:icon="@drawable/baseline_settings_24"
         android:id="@+id/menu_preferences"
         android:title="@string/preferences"

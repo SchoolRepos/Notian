@@ -15,6 +15,9 @@ import javax.inject.Singleton
 @Dao
 interface ListDao {
     @Insert
+    suspend fun insert(list: RawTodoList): Long
+
+    @Insert
     suspend fun insert(lists: List<RawTodoList>)
 
     @Query("SELECT * FROM rawtodolist")

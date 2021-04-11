@@ -31,4 +31,8 @@
     <string name="register_successful">Welcome to Notian!</string>
     <string name="drawer_todolists">Lists</string>
     <string name="synchronize">Synchronize</string>
+    <string name="new_task_list">New List</string>
+    <string name="create">Create</string>
+    <string name="list_name">List Name</string>
+    <string name="cancel">Cancel</string>
 </resources>

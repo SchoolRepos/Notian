@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import me.profiluefter.profinote.data.entities.*
 import me.profiluefter.profinote.data.local.NotesDatabase
 import me.profiluefter.profinote.data.remote.Credentials
@@ -76,6 +78,21 @@ class NotesRepository @Inject constructor(
         if (isNetworkAvailable()) {
             remote.editTodo(newRaw.id.toInt(), newRaw, username, password)
         }
+    }
+
+    suspend fun addList(listName: String): Int {
+        val rawList = RawTodoList(0, "NEW", listName, apiPattern.format(LocalDateTime.now()))
+
+        val newLocalID = local.listDao().insert(rawList).toInt()
+
+        GlobalScope.launch {
+            if (isNetworkAvailable()) {
+                val (_, newRemoteID) = remote.newList(rawList, username, password)
+                local.listDao().changeID(newLocalID, newRemoteID)
+            }
+        }
+
+        return newLocalID
     }
 
     suspend fun synchronize() {

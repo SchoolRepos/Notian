@@ -1,7 +1,6 @@
 package me.profiluefter.profinote.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -17,8 +16,6 @@ import me.profiluefter.profinote.models.MainViewModel
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
-
-    private val logTag = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +35,12 @@ class MainActivity : AppCompatActivity() {
         toolbar.setupWithNavController(navController, appBarConfiguration)
         drawer.setupWithNavController(navController)
 
+        val subMenu = drawer.menu.findItem(R.id.drawer_todolist_subtitle).subMenu
         viewModel.listNames.observe(this) {
-            val subtitleMenu = drawer.menu.findItem(R.id.drawer_todolist_subtitle)
-            val subMenu = subtitleMenu?.subMenu
-
-            if (subMenu == null) {
-                Log.w(logTag, "MenuItem subMenu was null")
-                return@observe
-            }
-
             subMenu.clear()
             it.forEach { listName ->
                 val item = subMenu.add(listName.second)
+                item.setIcon(R.drawable.baseline_label_24)
                 item.setOnMenuItemClickListener {
                     navController.navigate(NoteListFragmentDirections.changeCurrentList(listName.first))
                     findViewById<DrawerLayout>(R.id.nav_layout).close()

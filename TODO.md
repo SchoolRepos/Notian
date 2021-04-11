@@ -9,3 +9,4 @@
 # Stretch Goals
 
 * Notification when Task is due or x minutes before (preference option or per task)
+* Move tasks from one list to another

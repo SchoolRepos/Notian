@@ -3,8 +3,10 @@ package me.profiluefter.profinote.models
 import android.util.Log
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.profiluefter.profinote.data.NotesRepository
 import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.data.entities.TodoList
@@ -55,6 +57,16 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
     fun selectList(listID: Int) {
         Log.i(logTag, "Selecting list with id=$listID")
         selectedListID.value = listID
+    }
+
+    fun addList(listName: String) {
+        Log.i(logTag, "Adding new list $list")
+        GlobalScope.launch {
+            val newListID = repository.addList(listName)
+            withContext(Dispatchers.Main) {
+                selectList(newListID)
+            }
+        }
     }
 
     fun synchronize() {
