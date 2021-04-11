@@ -46,6 +46,10 @@ class NoteListFragment : Fragment() {
             findNavController().navigate(NoteListFragmentDirections.startLogin())
         }
 
+        floatingActionButton.setOnClickListener {
+            findNavController().navigate(NoteListFragmentDirections.openEditor(Note()))
+        }
+
         val adapter = NotesAdapter(
             viewModel.sortedList.value?.notes ?: emptyList(),
             ::showNoteDetails,
@@ -92,11 +96,11 @@ class NoteListFragment : Fragment() {
         fun deleteNote() {
             viewModel.deleteNote(note)
 
-            val bar = Snackbar.make(requireView(), R.string.note_deleted, Snackbar.LENGTH_SHORT)
-            bar.setAction(R.string.undo) {
-                viewModel.addNote(note)
+            Snackbar.make(requireView(), R.string.note_deleted, Snackbar.LENGTH_SHORT).apply {
+                animationMode = Snackbar.ANIMATION_MODE_SLIDE
+                setAction(R.string.undo) { viewModel.addNote(note) }
+                show()
             }
-            bar.show()
         }
 
         val menu = PopupMenu(requireContext(), view)
