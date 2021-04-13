@@ -21,7 +21,7 @@
             app:destination="@id/noteDetailsFragment" />
         <action
             android:id="@+id/changeCurrentList"
-            app:destination="@id/noteListFragment" />
+            app:destination="@id/noteListFragment" app:launchSingleTop="true"/>
         <argument
             android:name="listID"
             android:defaultValue="-1"

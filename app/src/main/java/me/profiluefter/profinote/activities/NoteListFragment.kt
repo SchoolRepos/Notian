@@ -10,10 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.edit
+import androidx.core.view.doOnPreDraw
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
@@ -22,6 +24,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialFadeThrough
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.databinding.FragmentNoteListBinding
@@ -58,6 +62,14 @@ class NoteListFragment : Fragment() {
             viewModel.selectList(lastListID)
 
         floatingActionButton.setOnClickListener {
+            this@NoteListFragment.apply {
+                exitTransition = MaterialElevationScale(true).apply {
+                    duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+                }
+                reenterTransition = MaterialElevationScale(true).apply {
+                    duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+                }
+            }
             findNavController().navigate(NoteListFragmentDirections.openEditor(Note()))
         }
 
@@ -94,11 +106,24 @@ class NoteListFragment : Fragment() {
         }
 
         setHasOptionsMenu(true)
+
+        enterTransition = MaterialFadeThrough().apply {
+            duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+        }
+        postponeEnterTransition()
+        this.root.doOnPreDraw { startPostponedEnterTransition() }
     }.root
 
     private fun showNoteDetails(note: Note) = View.OnClickListener {
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+        }
         findNavController().navigate(
-            NoteListFragmentDirections.showDetails(viewModel.refreshNote(note))
+            NoteListFragmentDirections.showDetails(viewModel.refreshNote(note)),
+            FragmentNavigatorExtras(it to "fragment_note_details_transition_name")
         )
     }
 

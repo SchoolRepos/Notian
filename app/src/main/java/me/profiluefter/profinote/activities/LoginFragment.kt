@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.databinding.FragmentLoginBinding
@@ -32,6 +33,12 @@ class LoginFragment : Fragment() {
         layoutViewModel = loginViewModel
 
         loginRegisterRedirect.setOnClickListener {
+            exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, false).apply {
+                duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+            }
+            reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true).apply {
+                duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+            }
             findNavController().navigate(LoginFragmentDirections.register())
         }
 

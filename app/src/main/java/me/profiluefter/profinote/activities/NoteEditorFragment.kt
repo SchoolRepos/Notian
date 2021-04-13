@@ -2,6 +2,7 @@ package me.profiluefter.profinote.activities
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +13,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.transition.Slide
+import com.google.android.material.transition.MaterialContainerTransform
 import me.profiluefter.profinote.R
 import me.profiluefter.profinote.databinding.FragmentNoteEditorBinding
 import me.profiluefter.profinote.models.MainViewModel
 import me.profiluefter.profinote.models.NoteEditorViewModel
 import me.profiluefter.profinote.models.NoteEditorViewModelFactory
+import me.profiluefter.profinote.themeColor
 import java.util.*
 
 class NoteEditorFragment : Fragment() {
@@ -42,6 +46,20 @@ class NoteEditorFragment : Fragment() {
         lifecycleOwner = this@NoteEditorFragment
         fragment = this@NoteEditorFragment
         layoutViewModel = this@NoteEditorFragment.editor
+    }.also { binding ->
+        enterTransition = MaterialContainerTransform().apply {
+            startView = requireActivity().findViewById(R.id.floatingActionButton)
+            endView = binding.root
+            duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+            scrimColor = Color.TRANSPARENT
+            containerColor = requireContext().themeColor(R.attr.colorSurface)
+            startContainerColor = requireContext().themeColor(R.attr.colorSecondary)
+            endContainerColor = requireContext().themeColor(R.attr.colorSurface)
+        }
+        returnTransition = Slide().apply {
+            duration = resources.getInteger(R.integer.notian_animation_time).toLong()
+            addTarget(binding.root)
+        }
     }.root
 
     fun saveNote() {

@@ -19,6 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:transitionName="fragment_note_details_transition_name"
         tools:context="me.profiluefter.profinote.activities.NoteDetailsFragment">
 
         <CheckBox

@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="me.profiluefter.profinote.data.entities.NoteKt" />
+        <import type="me.profiluefter.profinote.data.entities.NoteKt"/>
 
-        <import type="me.profiluefter.profinote.activities.MainActivity" />
+        <import type="me.profiluefter.profinote.activities.MainActivity"/>
 
         <variable
             name="note"
-            type="me.profiluefter.profinote.data.entities.Note" />
+            type="me.profiluefter.profinote.data.entities.Note"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:transitionName="@{@string/recycler_view_item_transition_name(note.localID)}"
         android:longClickable="true">
 
         <com.google.android.material.checkbox.MaterialCheckBox
@@ -31,7 +32,7 @@
             android:minHeight="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/itemTitle"
@@ -51,7 +52,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/itemDone"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/full_names" />
+            tools:text="@tools:sample/full_names"/>
 
         <TextView
             android:id="@+id/itemDate"
@@ -62,7 +63,7 @@
             android:text="@{NoteKt.getDate(note)}"
             app:layout_constraintEnd_toStartOf="@+id/itemTime"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/date/ddmmyy[0]" />
+            tools:text="@tools:sample/date/ddmmyy[0]"/>
 
         <TextView
             android:id="@+id/itemTime"
@@ -73,7 +74,7 @@
             android:text="@{NoteKt.getTime(note)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/date/hhmm" />
+            tools:text="@tools:sample/date/hhmm"/>
 
         <TextView
             android:id="@+id/itemDescription"
@@ -89,7 +90,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/itemDone"
             app:layout_constraintTop_toBottomOf="@+id/itemTitle"
-            tools:text="@tools:sample/lorem[4:10]" />
+            tools:text="@tools:sample/lorem[4:10]"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,7 @@
 # Bugs
 
 * overflow menu settings icon white on white when light theme
+* catch SocketTimeoutException because of school Wi-Fi
 
 # Minor improvements
 
