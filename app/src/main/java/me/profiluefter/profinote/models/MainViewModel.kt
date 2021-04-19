@@ -26,6 +26,8 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
     @Suppress("UNNECESSARY_SAFE_CALL") // LiveData is nullable
     val sortedList: LiveData<TodoList> = list.map { it?.sorted() }
 
+    val refreshing: MutableLiveData<Boolean> = MutableLiveData(false)
+
     private val logTag = "MainViewModel"
 
     fun deleteNote(note: Note) {
@@ -76,8 +78,12 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
 
     fun synchronize() {
         Log.i(logTag, "Invoking synchronizer")
+        refreshing.value = true
         GlobalScope.launch {
             repository.synchronize()
+            withContext(Dispatchers.Main) {
+                refreshing.value = false
+            }
         }
     }
 

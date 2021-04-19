@@ -98,6 +98,12 @@ class NoteListFragment : Fragment() {
                 it.name ?: getString(R.string.app_name)
         }
 
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.synchronize()
+        }
+
+        viewModel.refreshing.observe(viewLifecycleOwner) { swipeRefreshLayout.isRefreshing = it }
+
         if (args.listID != -1) {
             viewModel.selectList(args.listID)
             preferences.edit {

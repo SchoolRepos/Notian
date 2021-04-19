@@ -117,6 +117,8 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorPrimary"
             android:clickable="true"
+            android:visibility="invisible"
+            fabHidden="@{layoutViewModel.title.empty || layoutViewModel.description.empty}"
             android:contentDescription="@string/note_editor_save_button"
             android:focusable="true"
             android:onClick="@{() -> fragment.saveNote()}"

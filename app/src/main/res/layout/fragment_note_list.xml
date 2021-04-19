@@ -21,20 +21,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/notes"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:transitionGroup="true"
                 android:visibility="@{layoutViewModel.sortedList.notes.size() > 0 ? View.VISIBLE : View.GONE}"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                tools:listitem="@layout/recycler_view_item" />
+                app:layout_constraintVertical_bias="1.0">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/recycler_view_item" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <TextView
                 android:id="@+id/textView"

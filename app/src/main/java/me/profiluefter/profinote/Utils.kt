@@ -8,6 +8,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.res.use
 import androidx.databinding.BindingAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 
 @BindingAdapter("drawableEndCompat")
@@ -19,6 +20,15 @@ fun setDrawableEndCompat(view: TextView, drawable: Drawable?) {
 @BindingAdapter("errorText")
 fun setErrorText(view: TextInputLayout, text: String?) {
     view.error = text
+}
+
+@BindingAdapter("fabHidden")
+fun setFABHidden(fab: FloatingActionButton, hidden: Boolean) {
+    if(hidden) {
+        fab.hide()
+    } else {
+        fab.show()
+    }
 }
 
 @ColorInt
