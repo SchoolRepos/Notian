@@ -16,7 +16,7 @@ fun setDrawableEndCompat(view: TextView, drawable: Drawable?) {
     view.setCompoundDrawablesRelativeWithIntrinsicBounds(start, top, drawable, bottom)
 }
 
-@BindingAdapter("app:errorText")
+@BindingAdapter("errorText")
 fun setErrorText(view: TextInputLayout, text: String?) {
     view.error = text
 }

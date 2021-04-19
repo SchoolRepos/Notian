@@ -43,7 +43,7 @@
             android:transitionGroup="true"
             android:hint="@string/register_username"
             app:errorEnabled="@{layoutViewModel.state == LoginState.ERROR}"
-            app:errorText="@{layoutViewModel.errorMessage}"
+            errorText="@{layoutViewModel.errorMessage}"
             app:layout_constraintBottom_toTopOf="@+id/register_password_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="parent"

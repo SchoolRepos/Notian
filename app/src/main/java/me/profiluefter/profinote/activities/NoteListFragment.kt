@@ -176,6 +176,13 @@ class NoteListFragment : Fragment() {
             R.id.menu_new_task -> nav.navigate(NoteListFragmentDirections.openEditor(Note()))
             R.id.menu_synchronize -> viewModel.synchronize()
             R.id.menu_new_list -> createNewTaskList()
+            R.id.menu_logout -> {
+                preferences.edit {
+                    remove("username")
+                    remove("password")
+                }
+                findNavController().navigate(NoteListFragmentDirections.startLogin())
+            }
             R.id.menu_preferences -> nav.navigate(NoteListFragmentDirections.openSettings())
             else -> return false
         }

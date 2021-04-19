@@ -19,6 +19,11 @@
         android:title="@string/new_task_list"
         app:showAsAction="never" />
     <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/baseline_login_24"
+        android:title="@string/logout"
+        app:showAsAction="never" />
+    <item
         android:icon="@drawable/baseline_settings_24"
         android:id="@+id/menu_preferences"
         android:title="@string/preferences"
