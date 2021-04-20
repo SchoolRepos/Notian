@@ -2,6 +2,7 @@
 
 * overflow menu settings icon white on white when light theme
 * catch SocketTimeoutException because of school Wi-Fi
+* Transition from Todo List animates to wrong item on exit
 
 # Minor improvements
 
