@@ -80,6 +80,9 @@ interface TodoDao {
     @Query("UPDATE rawtodo SET id = :id WHERE localID = :localID")
     suspend fun changeID(localID: Int, id: String)
 
+    @Query("UPDATE rawtodo SET todoListId = :remoteID WHERE localListID = :localID")
+    suspend fun changeListID(localID: Int, remoteID: String)
+
     @Delete
     suspend fun delete(rawTodo: RawTodo)
 

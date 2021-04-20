@@ -44,12 +44,18 @@ class NotesRepository @Inject constructor(
     suspend fun deleteNote(note: Note) {
         val rawNote = local.todoDao().getByLocalID(note.localID)
 
+        if(rawNote.id == "NEW") {
+            local.todoDao().delete(rawNote)
+            return
+        }
+
         if (isNetworkAvailable()) {
             local.todoDao().delete(rawNote)
             try {
                 remote.deleteTodo(rawNote.id.toInt(), username, password)
             } catch (e: Exception) {
                 local.todoDao().insert(rawNote)
+                local.todoDao().scheduleDelete(note.localID)
                 throw RuntimeException("Error while deleting note $note from server", e)
             }
         } else
@@ -96,6 +102,11 @@ class NotesRepository @Inject constructor(
     }
 
     suspend fun synchronize() {
+        if(!isNetworkAvailable()) {
+            Log.w(logTag, "Synchronization ignored since the device is offline")
+            return
+        }
+
         Log.i(logTag, "Starting synchronization...")
         synchronizeLists()
         Log.i(logTag, "Finished list synchronization! Starting todo synchronization...")
@@ -114,6 +125,7 @@ class NotesRepository @Inject constructor(
         Log.d(logTag, "Deleting ${deleteLists.size} todo lists")
         deleteLists.forEach {
             remote.deleteList(it.id.toInt(), username, password)
+            local.listDao().delete(it)
         }
 
         val uploadLists = remainingLocal.filter { it.id == "NEW" }
@@ -121,6 +133,7 @@ class NotesRepository @Inject constructor(
         uploadLists.forEach {
             val (_, newID) = remote.newList(it, username, password)
             local.listDao().changeID(it.localID, newID)
+            local.todoDao().changeListID(it.localID, newID)
         }
 
         val remainingLists = local.listDao().getAll()
@@ -173,6 +186,7 @@ class NotesRepository @Inject constructor(
         Log.d(logTag, "Deleting ${deleteTodos.size} todos")
         deleteTodos.forEach {
             remote.deleteTodo(it.id.toInt(), username, password)
+            local.todoDao().delete(it)
         }
 
         val uploadTodos = remainingLocal.filter { it.id == "NEW" }
