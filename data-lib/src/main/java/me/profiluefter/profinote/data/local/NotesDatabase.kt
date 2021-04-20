@@ -40,6 +40,12 @@ interface ListDao {
 
     @Query("UPDATE rawtodolist SET id = :id WHERE localID = :localID")
     suspend fun changeID(localID: Int, id: String)
+
+    @Query("DELETE FROM rawtodolist")
+    suspend fun nuke()
+
+    @Delete
+    suspend fun delete(it: RawTodoList)
 }
 
 @Dao
@@ -76,6 +82,9 @@ interface TodoDao {
 
     @Delete
     suspend fun delete(rawTodo: RawTodo)
+
+    @Query("DELETE FROM rawtodo")
+    suspend fun nuke()
 }
 
 @Database(entities = [RawTodoList::class, RawTodo::class], version = 1)

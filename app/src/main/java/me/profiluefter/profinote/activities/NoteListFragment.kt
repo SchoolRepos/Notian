@@ -186,7 +186,9 @@ class NoteListFragment : Fragment() {
                 preferences.edit {
                     remove("username")
                     remove("password")
+                    remove("listID")
                 }
+                viewModel.nuke()
                 findNavController().navigate(NoteListFragmentDirections.startLogin())
             }
             R.id.menu_preferences -> nav.navigate(NoteListFragmentDirections.openSettings())

@@ -248,6 +248,11 @@ class NotesRepository @Inject constructor(
     suspend fun setNoteChecked(localID: Int, checked: Boolean) {
         local.todoDao().setChecked(localID, checked)
     }
+
+    suspend fun nuke() {
+        local.todoDao().nuke()
+        local.listDao().nuke()
+    }
 }
 
 private fun <T> retrofitErrorCallback(onError: (Throwable) -> Unit): Callback<T> =

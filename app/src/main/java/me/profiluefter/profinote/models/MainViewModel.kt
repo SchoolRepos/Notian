@@ -89,4 +89,10 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
 
     fun refreshNote(note: Note): Note =
         list.value!!.notes.find { it.localID == note.localID }!!
+
+    fun nuke() {
+        GlobalScope.launch {
+            repository.nuke()
+        }
+    }
 }
