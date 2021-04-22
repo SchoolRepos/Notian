@@ -34,6 +34,19 @@ class NoteEditorViewModel(note: Note) : ViewModel() {
         get() {
             val (day, month, year) = date.value!!.split(".").map { it.toInt() }
             val (hour, minute) = time.value!!.split(":").map { it.toInt() }
-            return Note(localID, title.value!!, done.value!!, minute, hour, day, month, year, description.value!!)
+            return Note(
+                localID,
+                title.value!!,
+                done.value!!,
+                minute,
+                hour,
+                day,
+                month,
+                year,
+                description.value!!,
+                0.0,
+                0.0,
+                "",
+            )
         }
 }

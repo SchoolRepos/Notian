@@ -1,5 +1,7 @@
 package me.profiluefter.profinote.data.entities
 
+import android.util.Log
+import com.google.gson.Gson
 import java.io.Serializable
 import java.time.LocalDateTime
 import java.time.temporal.ChronoField.*
@@ -14,7 +16,10 @@ data class Note(
     val day: Int,
     val month: Int,
     val year: Int,
-    val description: String
+    val description: String,
+    val latitude: Double,
+    val longitude: Double,
+    val address: String,
 ) : Serializable, Comparable<Note> {
     constructor(calendar: Calendar = Calendar.getInstance()) : this(
         0,
@@ -25,7 +30,10 @@ data class Note(
         calendar.get(Calendar.DAY_OF_MONTH),
         calendar.get(Calendar.MONTH) + 1,
         calendar.get(Calendar.YEAR),
-        ""
+        "",
+        0.0,
+        0.0,
+        "",
     )
 
     override fun compareTo(other: Note): Int {
@@ -42,12 +50,25 @@ data class Note(
         description,
         apiPattern.format(LocalDateTime.of(year, month, day, hour, minute)),
         if (done) "DONE" else "TODO",
-        apiPattern.format(LocalDateTime.now())
+        Gson().toJson(
+            AdditionalDataContainer(
+                apiPattern.format(LocalDateTime.now()),
+                AdditionalDataContainer.LocationInformation(latitude, longitude, address)
+            )
+        ),
     )
 
     companion object {
         fun from(api: RawTodo): Note = api.run {
             val due = apiPattern.parse(dueDate)
+            val dataContainer = try {
+                Gson().fromJson(additionalData, AdditionalDataContainer::class.java)
+            } catch (e: Exception) {
+                null
+            }
+
+            if (dataContainer?.locationInformation == null)
+                Log.w("Note", "Additional data from note id=$localID doesn't contain location information")
 
             return Note(
                 localID,
@@ -66,7 +87,10 @@ data class Note(
                 due.get(DAY_OF_MONTH),
                 due.get(MONTH_OF_YEAR),
                 due.get(YEAR),
-                description
+                description,
+                dataContainer?.locationInformation?.latitude ?: 0.0,
+                dataContainer?.locationInformation?.longitude ?: 0.0,
+                dataContainer?.locationInformation?.address ?: "",
             )
         }
     }

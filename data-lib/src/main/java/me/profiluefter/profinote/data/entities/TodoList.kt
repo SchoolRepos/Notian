@@ -1,5 +1,6 @@
 package me.profiluefter.profinote.data.entities
 
+import com.google.gson.Gson
 import java.time.LocalDateTime
 
 data class TodoList(
@@ -12,7 +13,12 @@ data class TodoList(
         remoteID,
         "0",
         name,
-        apiPattern.format(LocalDateTime.now())
+        Gson().toJson(
+            AdditionalDataContainer(
+                apiPattern.format(LocalDateTime.now()),
+                null
+            )
+        ),
     )
 
     fun sorted(): TodoList = TodoList(

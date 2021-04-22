@@ -8,6 +8,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
 
 @Module
@@ -18,6 +20,14 @@ object GsonModule {
     fun createGson(): Gson = GsonBuilder()
         .setExclusionStrategies(ExposeExclusionStrategy())
         .create()
+
+    @Provides
+    @Singleton
+    fun loggingHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
+        .build()
 }
 
 @Target(AnnotationTarget.FIELD)

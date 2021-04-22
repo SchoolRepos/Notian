@@ -3,6 +3,7 @@ package me.profiluefter.profinote.data.entities
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
 import me.profiluefter.profinote.data.LocalOnly
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -112,6 +113,17 @@ data class RawTodo(
     )
 }
 
+data class AdditionalDataContainer(
+    val lastChanged: String,
+    val locationInformation: LocationInformation?,
+) {
+    data class LocationInformation(
+        val latitude: Double,
+        val longitude: Double,
+        val address: String,
+    )
+}
+
 val apiPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
 fun RawTodoList.serverEquals(other: RawTodoList): Boolean =
@@ -134,8 +146,14 @@ fun RawTodoList.changedDate(): LocalDateTime = parseAdditionalData(additionalDat
 fun RawTodo.changedDate(): LocalDateTime = parseAdditionalData(additionalData)
 
 fun parseAdditionalData(additionalData: String): LocalDateTime {
+    val lastChanged = try {
+        Gson().fromJson(additionalData, AdditionalDataContainer::class.java).lastChanged
+    } catch (e: Exception) {
+        additionalData
+    }
+
     return try {
-        val accessor = apiPattern.parse(additionalData)
+        val accessor = apiPattern.parse(lastChanged)
         val date = accessor.query(TemporalQueries.localDate())
         val time = accessor.query(TemporalQueries.localTime())
         date.atTime(time)

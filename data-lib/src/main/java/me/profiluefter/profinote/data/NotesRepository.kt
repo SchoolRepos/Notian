@@ -14,9 +14,6 @@ import me.profiluefter.profinote.data.entities.*
 import me.profiluefter.profinote.data.local.NotesDatabase
 import me.profiluefter.profinote.data.remote.Credentials
 import me.profiluefter.profinote.data.remote.NotesAPI
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Provider
@@ -268,12 +265,3 @@ class NotesRepository @Inject constructor(
         local.listDao().nuke()
     }
 }
-
-private fun <T> retrofitErrorCallback(onError: (Throwable) -> Unit): Callback<T> =
-    object : Callback<T> {
-        override fun onResponse(call: Call<T>, response: Response<T>) {}
-
-        override fun onFailure(call: Call<T>, t: Throwable) {
-            onError(t)
-        }
-    }
