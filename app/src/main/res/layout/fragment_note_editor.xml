@@ -85,6 +85,29 @@
             app:layout_constraintTop_toBottomOf="@+id/noteEditorTitleContainer" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/noteEditorLocationContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/baseline_my_location_24"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteEditorDate">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/noteEditorLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/note_editor_location"
+                android:inputType="textPostalAddress"
+                android:text="@={layoutViewModel.location}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/noteEditorDescriptionContainer"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
@@ -97,7 +120,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/noteEditorTime"
+            app:layout_constraintTop_toBottomOf="@+id/noteEditorLocationContainer"
             app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -118,7 +141,7 @@
             android:backgroundTint="?attr/colorPrimary"
             android:clickable="true"
             android:visibility="invisible"
-            fabHidden="@{layoutViewModel.title.empty || layoutViewModel.description.empty}"
+            fabHidden="@{layoutViewModel.title.empty || layoutViewModel.description.empty || layoutViewModel.location.empty}"
             android:contentDescription="@string/note_editor_save_button"
             android:focusable="true"
             android:onClick="@{() -> fragment.saveNote()}"

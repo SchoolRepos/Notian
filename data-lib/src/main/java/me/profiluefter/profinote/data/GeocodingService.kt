@@ -1,4 +1,4 @@
-package me.profiluefter.profinote.data.geocoding
+package me.profiluefter.profinote.data
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -15,6 +15,10 @@ import retrofit2.http.Query
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+
+interface GeocodingService {
+    suspend fun reverse(latitude: Double, longitude: Double): String
+}
 
 class LocationIQGeocodingService @Inject constructor(
     private val api: LocationIQAPI,
@@ -51,4 +55,12 @@ object LocationIQModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
         .create()
+
+    @Provides
+    @Singleton
+    fun locationIQGeocoder(locationIQGeocodingService: LocationIQGeocodingService): GeocodingService = locationIQGeocodingService
+
+    @Provides
+    @Named("locationIQ")
+    fun apiKeyLocationIQ(): String = "pk.c84c8c163dcf39e91bbfdb75c757ead0" // Throwaway account, not secret
 }

@@ -37,4 +37,5 @@
     <string name="cancel">Cancel</string>
     <string name="recycler_view_item_transition_name">recycler_view_item_transition_name_%1$s</string>
     <string name="logout">Logout</string>
+    <string name="note_editor_location">Location</string>
 </resources>
