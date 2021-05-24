@@ -45,14 +45,14 @@ dependencies {
 
     // Kotlin + Coroutines
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
 
     // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
-    api 'com.squareup.okhttp3:okhttp:4.9.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    api "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     api 'com.google.code.gson:gson:2.8.6'
 
     // Room
@@ -61,5 +61,5 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     // Notifications
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.core:core-ktx:1.5.0'
 }

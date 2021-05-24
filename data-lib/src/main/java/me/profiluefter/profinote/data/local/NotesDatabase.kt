@@ -93,7 +93,7 @@ interface TodoDao {
     suspend fun nuke()
 }
 
-@Database(entities = [RawTodoList::class, RawTodo::class], version = 1)
+@Database(entities = [RawTodoList::class, RawTodo::class], version = 1, exportSchema = false)
 abstract class NotesDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
     abstract fun listDao(): ListDao
