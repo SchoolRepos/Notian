@@ -2,4 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory android:title="@string/settings_notification_category">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="upload_notification"
+            android:title="@string/settings_upload_notification"
+            app:defaultValue="true"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="startup_notification"
+            android:title="@string/settings_startup_notification"
+            app:defaultValue="true"/>
+    </PreferenceCategory>
 </PreferenceScreen>
