@@ -43,8 +43,8 @@ class NoteEditorViewModel @Inject constructor(private val geocodingService: Geoc
     val date: MutableLiveData<String> = MutableLiveData()
     val time: MutableLiveData<String> = MutableLiveData()
     val description: MutableLiveData<String> = MutableLiveData()
-    val latitude: MutableLiveData<Double> = MutableLiveData()
-    val longitude: MutableLiveData<Double> = MutableLiveData()
+    private val latitude: MutableLiveData<Double> = MutableLiveData()
+    private val longitude: MutableLiveData<Double> = MutableLiveData()
     val location: MutableLiveData<String> = MutableLiveData()
 
     val note: Note
@@ -61,9 +61,9 @@ class NoteEditorViewModel @Inject constructor(private val geocodingService: Geoc
                 month,
                 year,
                 description.value!!,
-                latitude.value!!,
-                longitude.value!!,
-                location.value!!
+                latitude.value ?: 0.0,
+                longitude.value ?: 0.0,
+                location.value ?: ""
             )
         }
 }
