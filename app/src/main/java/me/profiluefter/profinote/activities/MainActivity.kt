@@ -100,9 +100,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun showStartupNotification() {
-        if (!sharedPreferences.getBoolean("startup_notification", true)) return
-
         createNotificationChannel()
+
+        if (!sharedPreferences.getBoolean("startup_notification", true)) return
 
         val dueToday: List<Note> = viewModel.getNotesDueToday()
         showParentNotification()
