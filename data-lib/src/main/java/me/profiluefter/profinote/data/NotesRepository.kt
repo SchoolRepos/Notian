@@ -1,9 +1,15 @@
 package me.profiluefter.profinote.data
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
+import android.os.Build
+import android.preference.PreferenceManager
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.content.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
@@ -17,11 +23,14 @@ import me.profiluefter.profinote.data.remote.NotesAPI
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class NotesRepository @Inject constructor(
     private val remote: NotesAPI,
     private val local: NotesDatabase,
     private val credentials: Provider<Credentials>,
+    private val deepLinkProvider: DeepLinkProvider,
     @ApplicationContext private val context: Context
 ) {
     private val username: String
@@ -30,6 +39,10 @@ class NotesRepository @Inject constructor(
         get() = credentials.get().password
 
     private val logTag = "NotesRepository"
+
+    private val notificationManager by lazy { context.getSystemService<NotificationManager>()!! }
+
+    private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(context) }
 
     fun getListLive(localID: Int): LiveData<TodoList> =
         local.listDao().getByLocalIDLive(localID).switchMap { list ->
@@ -180,6 +193,8 @@ class NotesRepository @Inject constructor(
     }
 
     private suspend fun synchronizeTodos() {
+        createUploadNotificationChannel()
+
         val localTodos = local.todoDao().getAll()
 
         val (deleteTodos, remainingLocal) =
@@ -195,8 +210,12 @@ class NotesRepository @Inject constructor(
         Log.d(logTag, "Uploading ${uploadTodos.size} todos")
         uploadTodos.forEach {
             val (_, newID) = remote.newTodo(it, username, password)
+            // New item uploaded, showing notification
+            showUploadNotification(it)
             local.todoDao().changeID(it.localID, newID)
         }
+        if(uploadTodos.isNotEmpty())
+            showUploadParentNotification()
 
         val remainingTodos = local.todoDao().getAll()
 
@@ -247,6 +266,56 @@ class NotesRepository @Inject constructor(
             .map { it.first }
         Log.d(logTag, "Executing ${localEdits.size} local edits")
         local.todoDao().update(localEdits)
+    }
+
+    private fun createUploadNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager.createNotificationChannel(
+                NotificationChannel(
+                    context.getString(R.string.notification_upload_channel_id),
+                    context.getString(R.string.notification_upload_channel_name),
+                    NotificationManager.IMPORTANCE_LOW
+                )
+            )
+        }
+    }
+
+    private fun showUploadNotification(it: RawTodo) {
+        if(!sharedPreferences.getBoolean("upload_notification", true)) return
+
+        val notification =
+            NotificationCompat.Builder(context, context.getString(R.string.notification_upload_channel_id))
+                .setSmallIcon(R.drawable.baseline_task_24)
+                .setContentTitle(it.title)
+                .setContentText(it.description)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(it.description))
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setGroup(context.getString(R.string.notification_upload_group_id))
+                .setContentIntent(deepLinkProvider.deepLinkToNote(Note.from(it)))
+                .build()
+        notificationManager.notify(
+            Random.nextInt(Integer.MIN_VALUE..Integer.MAX_VALUE),
+            notification
+        )
+    }
+
+    private fun showUploadParentNotification() {
+        if(!sharedPreferences.getBoolean("upload_notification", true)) return
+
+        val notification = NotificationCompat.Builder(context, context.getString(R.string.notification_upload_channel_id))
+            .setSmallIcon(R.drawable.baseline_task_24)
+            .setContentTitle(context.getString(R.string.notification_upload_title))
+            .setContentText(context.getString(R.string.notification_upload_description))
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setGroup(context.getString(R.string.notification_upload_group_id))
+            .setGroupSummary(true)
+            .setStyle(NotificationCompat.InboxStyle()
+                .setSummaryText(context.getString(R.string.notification_upload_description)))
+            .build()
+        notificationManager.notify(
+            Random.nextInt(Integer.MIN_VALUE..Integer.MAX_VALUE),
+            notification
+        )
     }
 
     private fun isNetworkAvailable(): Boolean =

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_upload_channel_id">upload</string>
+    <string name="notification_upload_channel_name">Upload Notifications</string>
+    <string name="notification_upload_group_id">upload_notification_group</string>
+    <string name="notification_upload_title">Tasks uploaded</string>
+    <string name="notification_upload_description">The following tasks were uploaded</string>
+</resources>
