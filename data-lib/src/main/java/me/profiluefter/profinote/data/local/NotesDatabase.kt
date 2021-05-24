@@ -60,6 +60,9 @@ interface TodoDao {
     suspend fun getAll(): List<RawTodo>
 
     @Query("SELECT * FROM rawtodo WHERE localListID = :listID")
+    suspend fun getByListID(listID: Int): List<RawTodo>
+
+    @Query("SELECT * FROM rawtodo WHERE localListID = :listID")
     fun getByListIDLive(listID: Int): LiveData<List<RawTodo>>
 
     @Query("SELECT * FROM rawtodo WHERE localID = :localID")

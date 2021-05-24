@@ -12,16 +12,17 @@ import kotlinx.coroutines.withContext
 import me.profiluefter.profinote.data.NotesRepository
 import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.data.entities.TodoList
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: NotesRepository) : ViewModel() {
-    val listNames: LiveData<List<Pair<Int, String>>> = repository.getListNames()
+    val listNames: LiveData<List<Pair<Int, String>>> = repository.getListNamesLive()
 
     private val selectedListID: MutableLiveData<Int> = MutableLiveData()
 
     private val list: LiveData<TodoList> = selectedListID
-        .switchMap { repository.getList(it ?: return@switchMap MutableLiveData()) }
+        .switchMap { repository.getListLive(it ?: return@switchMap MutableLiveData()) }
 
     @Suppress("UNNECESSARY_SAFE_CALL") // LiveData is nullable
     val sortedList: LiveData<TodoList> = list.map { it?.sorted() }
@@ -95,4 +96,16 @@ class MainViewModel @Inject constructor(private val repository: NotesRepository)
             repository.nuke()
         }
     }
+
+    suspend fun getNotesDueToday(calendar: Calendar = Calendar.getInstance()): List<Note> =
+        repository
+            .getListNames()
+            .map { it.first }
+            .map { repository.getList(it) }
+            .flatMap { it.notes } // all notes
+            .filter {
+                it.day == calendar.get(Calendar.DAY_OF_MONTH)
+                        && it.month == calendar.get(Calendar.MONTH) + 1
+                        && it.year == calendar.get(Calendar.YEAR)
+            }
 }

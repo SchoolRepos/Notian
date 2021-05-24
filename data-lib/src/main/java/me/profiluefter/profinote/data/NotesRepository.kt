@@ -31,17 +31,22 @@ class NotesRepository @Inject constructor(
 
     private val logTag = "NotesRepository"
 
-    fun getList(localID: Int): LiveData<TodoList> =
+    fun getListLive(localID: Int): LiveData<TodoList> =
         local.listDao().getByLocalIDLive(localID).switchMap { list ->
             local.todoDao().getByListIDLive(localID).map { todos ->
                 TodoList.from(list, todos.filterNot { it.additionalData == "DELETE" })
             }
         }
 
+    suspend fun getList(localID: Int): TodoList = TodoList.from(
+        local.listDao().getByLocalID(localID),
+        local.todoDao().getByListID(localID).filterNot { it.additionalData == "DELETE" }
+    )
+
     suspend fun deleteNote(note: Note) {
         val rawNote = local.todoDao().getByLocalID(note.localID)
 
-        if(rawNote.id == "NEW") {
+        if (rawNote.id == "NEW") {
             local.todoDao().delete(rawNote)
             return
         }
@@ -99,7 +104,7 @@ class NotesRepository @Inject constructor(
     }
 
     suspend fun synchronize() {
-        if(!isNetworkAvailable()) {
+        if (!isNetworkAvailable()) {
             Log.w(logTag, "Synchronization ignored since the device is offline")
             return
         }
@@ -253,8 +258,10 @@ class NotesRepository @Inject constructor(
             } ?: false
         }
 
-    fun getListNames(): LiveData<List<Pair<Int, String>>> =
+    fun getListNamesLive(): LiveData<List<Pair<Int, String>>> =
         local.listDao().getAllLive().map { lists -> lists.map { it.localID to it.name } }
+
+    suspend fun getListNames(): List<Pair<Int, String>> = local.listDao().getAll().map { it.localID to it.name }
 
     suspend fun setNoteChecked(localID: Int, checked: Boolean) {
         local.todoDao().setChecked(localID, checked)

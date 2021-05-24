@@ -38,4 +38,12 @@
     <string name="recycler_view_item_transition_name">recycler_view_item_transition_name_%1$s</string>
     <string name="logout">Logout</string>
     <string name="note_editor_location">Location</string>
+    <string name="settings_upload_notification">Upload Notifications</string>
+    <string name="settings_notification_category">Notifications</string>
+    <string name="settings_startup_notification">Startup Notification</string>
+    <string name="notification_startup_channel_id">startup</string>
+    <string name="notification_startup_channel_name">Startup Notifications</string>
+    <string name="notification_startup_title">Tasks due today</string>
+    <string name="notification_startup_description">The following tasks are due today…</string>
+    <string name="notification_startup_group_id">startup_notification_group</string>
 </resources>

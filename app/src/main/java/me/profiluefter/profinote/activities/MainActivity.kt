@@ -1,13 +1,20 @@
 package me.profiluefter.profinote.activities
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.getSystemService
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -16,7 +23,10 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import me.profiluefter.profinote.R
+import me.profiluefter.profinote.data.entities.Note
 import me.profiluefter.profinote.models.MainViewModel
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -85,5 +95,66 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        lifecycleScope.launchWhenCreated { showStartupNotification() }
+    }
+
+    private suspend fun showStartupNotification() {
+        if (!sharedPreferences.getBoolean("startup_notification", true)) return
+
+        createNotificationChannel()
+
+        val dueToday: List<Note> = viewModel.getNotesDueToday()
+        showParentNotification()
+        showNoteNotifications(dueToday)
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getSystemService<NotificationManager>()!!.createNotificationChannel(
+                NotificationChannel(
+                    getString(R.string.notification_startup_channel_id),
+                    getString(R.string.notification_startup_channel_name),
+                    NotificationManager.IMPORTANCE_LOW
+                )
+            )
+        }
+    }
+
+    private fun showNoteNotifications(dueToday: List<Note>) {
+        val notificationManager = NotificationManagerCompat.from(this)
+
+        dueToday.map {
+            NotificationCompat.Builder(this, getString(R.string.notification_startup_channel_id))
+                .setSmallIcon(R.drawable.baseline_task_24)
+                .setContentTitle(it.title)
+                .setContentText(it.description)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(it.description))
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setGroup(getString(R.string.notification_startup_group_id))
+                .build()
+        }.forEach {
+            notificationManager.notify(
+                Random.nextInt(Integer.MIN_VALUE..Integer.MAX_VALUE),
+                it
+            )
+        }
+    }
+
+    private fun showParentNotification() {
+        val notification = NotificationCompat.Builder(this, getString(R.string.notification_startup_channel_id))
+            .setSmallIcon(R.drawable.baseline_task_24)
+            .setContentTitle(getString(R.string.notification_startup_title))
+            .setContentText(getString(R.string.notification_startup_description))
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setGroup(getString(R.string.notification_startup_group_id))
+            .setGroupSummary(true)
+            .setStyle(NotificationCompat.InboxStyle()
+                .setSummaryText(getString(R.string.notification_startup_description)))
+            .build()
+        NotificationManagerCompat.from(this).notify(
+            Random.nextInt(Integer.MIN_VALUE..Integer.MAX_VALUE),
+            notification
+        )
     }
 }
